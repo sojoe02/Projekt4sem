@@ -1,0 +1,26 @@
+
+SETUP INSTRUKTIONER:
+
+Global setup:
+
+ Download and install Git
+  git config --global user.name "Your Name"
+  git config --global user.email "your email"
+        
+
+Next steps:
+
+  mkdir help
+  cd help
+  git init
+  git commit -m 'first commit'
+  git remote add origin git@github.com:<brugernavn>/Projekt4sem.git
+  git push origin master
+      
+
+Existing Git Repo?
+
+  cd existing_git_repo
+  git remote add origin git@github.com:<brugernavn>/Projekt4sem.git
+  git push origin master
+      
