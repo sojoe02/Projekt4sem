@@ -1,3 +1,5 @@
+package domain;
+
 import java . util . * ;
 
 public class Sas {
@@ -21,10 +23,10 @@ public class Sas {
 	public void placeOrder(String endLoc, String startLoc, String endDate, String volume, String weight)	{
 		Ship ship = ships.get("1");
 		
-		if (ship.availCargo(volume,weight)==true)	{
+	/*	if (ship.availCargo(volume,weight)==true)	{
 			
 		}
-		
+	*/	
 		
 	//	ArrayList<String> shipsList = new ArrayList<String >( ) ;	
 	//	shipsList.add(ships.get("1").toString());

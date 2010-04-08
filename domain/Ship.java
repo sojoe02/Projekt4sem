@@ -1,3 +1,5 @@
+package domain;
+
 
 public class Ship {
 
@@ -12,15 +14,15 @@ public class Ship {
 		return shipsID;
 	}
 	
-	public boolean availCargo(String volume, String weight)	{
-		if (cargo.availCargo(volume, weight)== true) {
+	/*	public boolean availCargo(String volume, String weight)	{
+			if (cargo.availCargo(volume, weight)== true) {
 			return true;	
 		}
 		
 		
 	}
 	
-	
+	*/
 	
 	public String toString()	{
 		return	"22";

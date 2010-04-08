@@ -1,3 +1,4 @@
+package domain;
 
 public class Cargo {
 
@@ -9,14 +10,17 @@ public class Cargo {
 	this.currentvolume = currentvolume;
 	this.currentweight = currentweight;
 	}
-	public boolean availCargo(String volome, String weight)	{
+	/*public boolean availCargo(String volome, String weight)	{
 		if (currentvolume > volume) {
 			(currentweight > weight)	{
 			return true;	
 		}
 		}
-		
 			return false;
 		}
+	*/
+	
 	}
-}
+	
+	
+
