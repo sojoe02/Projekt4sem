@@ -3,15 +3,15 @@ package domain;
 
 public class Ship {
 
-	private String shipsID;
+	private String shipID;
 	
 	
 	public Ship (String shipID, String currentvolume, String currentweight)	{
-	this.shipsID = shipsID;
+	this.shipID = shipID;
 	Cargo cargo = new Cargo(currentvolume, currentweight);
 	}
 	public String getShipsID()	{
-		return shipsID;
+		return shipID;
 	}
 	
 	/*	public boolean availCargo(String volume, String weight)	{
@@ -25,6 +25,6 @@ public class Ship {
 	*/
 	
 	public String toString()	{
-		return	"22";
+		return	shipID;
 	}
 }

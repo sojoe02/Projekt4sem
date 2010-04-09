@@ -4,8 +4,7 @@ import java . util . * ;
 
 public class Sas {
 
-	
-	
+
 	
 	private Map<String , Ship> ships = new HashMap<String , Ship >( ) ;
 	
@@ -31,4 +30,26 @@ public class Sas {
 	//	ArrayList<String> shipsList = new ArrayList<String >( ) ;	
 	//	shipsList.add(ships.get("1").toString());
 	}
+
+	public void seeShipInfo(String shipID){
+	    Ship currentship = null;
+
+	    Ship s1 = new Ship("s1","1000","45000");
+	    Ship s2 = new Ship("s2","2000","30000");
+	    //tilføj test skibe
+
+	    ships.put("s1",s1);
+	    ships.put("s2",s2);
+	    //lægger skibe i hashmap
+
+	    System.out.print(findShip(shipID));
+
+	}
+
+	private Ship findShip(String ShipID){
+	    return ships.get(ShipID);
+	}
+
 }
+
+
