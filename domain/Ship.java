@@ -3,12 +3,17 @@ package domain;
 
 public class Ship {
 
-	private String shipsID;
+
+	private String shipID;
 	Cargo cargo;
 	
 	public Ship (String shipsID, String currentvolume, String currentweight)	{
-	this.shipsID = shipsID;
+	this.shipID = shipsID;
 	cargo = new Cargo(currentvolume, currentweight);
+	}
+	public String getShipID()	{
+		return shipID;
+
 	}
 	//public String getShipsID()	{
 	//	return shipsID;
@@ -21,8 +26,15 @@ public class Ship {
 		return false;
 		
 	}
+
 	public void updateShip(String volume, String weight)	{
 	    cargo.updateShip(volume,weight);
+	}
+	
+	
+	public String toString(){
+		return	shipID;
+
 	}
 }
 	
