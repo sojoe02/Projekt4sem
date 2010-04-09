@@ -9,7 +9,7 @@
  * Created on 07-04-2010, 16:38:10
  */
 
-package Presentation;
+package presentation;
 
 /**
  *
@@ -60,7 +60,7 @@ public class StartGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(LavOrdre)
                     .addComponent(jLabel1))
                 .addContainerGap(192, Short.MAX_VALUE))
