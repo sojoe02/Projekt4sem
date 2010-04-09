@@ -4,27 +4,26 @@ package domain;
 public class Ship {
 
 	private String shipsID;
+	Cargo cargo;
 	
-	
-	public Ship (String shipID, String currentvolume, String currentweight)	{
+	public Ship (String shipsID, String currentvolume, String currentweight)	{
 	this.shipsID = shipsID;
-	Cargo cargo = new Cargo(currentvolume, currentweight);
+	cargo = new Cargo(currentvolume, currentweight);
 	}
-	public String getShipsID()	{
-		return shipsID;
-	}
+	//public String getShipsID()	{
+	//	return shipsID;
+	//}
 	
-	/*	public boolean availCargo(String volume, String weight)	{
+	public boolean availCargo(String volume, String weight)	{
 			if (cargo.availCargo(volume, weight)== true) {
 			return true;	
 		}
-		
+		return false;
 		
 	}
-	
-	*/
-	
-	public String toString()	{
-		return	"22";
+	public void updateShip(String volume, String weight)	{
+	    cargo.updateShip(volume,weight);
 	}
 }
+	
+	

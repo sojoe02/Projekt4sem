@@ -2,23 +2,28 @@ package domain;
 
 public class Cargo {
 
-	private String currentvolume;
-	private String currentweight;
+	private int currentvolume;
+	private int currentweight;
 	
 	
 	public Cargo (String currentvolume, String currentweight)	{
-	this.currentvolume = currentvolume;
-	this.currentweight = currentweight;
+	this.currentvolume = Integer.parseInt(currentvolume);
+	this.currentweight = Integer.parseInt(currentweight);
 	}
-	/*public boolean availCargo(String volome, String weight)	{
-		if (currentvolume > volume) {
-			(currentweight > weight)	{
-			return true;	
-		}
+	
+	public boolean availCargo(String volume, String weight)	{
+		if (currentvolume > Integer.parseInt(volume)
+			&& currentweight > Integer.parseInt(weight))	{
+		
+			return true;
+		
 		}
 			return false;
 		}
-	*/
+	public void updateShip(String volume, String weight)	{
+	    currentvolume = currentvolume-Integer.parseInt(volume);
+	    currentweight = currentweight-Integer.parseInt(weight);
+	}
 	
 	}
 	
