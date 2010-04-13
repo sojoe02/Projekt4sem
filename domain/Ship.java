@@ -1,17 +1,29 @@
 package domain;
 
+import java.util.ArrayList;
+
 
 public class Ship {
 
 	private String shipID;
+
+	private Cargo cargo;	//skibets Last
+
 	
 	
-	public Ship (String shipID, String currentvolume, String currentweight)	{
-	this.shipID = shipID;
-	Cargo cargo = new Cargo(currentvolume, currentweight);
+	public Ship (String shipID, String currentvolume, String currentweight)
+	{
+	    this.shipID = shipID;
+
+	    cargo = new Cargo(currentvolume, currentweight);
 	}
-	public String getShipsID()	{
+
+	public String getShipsID(){
 		return shipID;
+	}
+	public void getCargo()
+	{
+
 	}
 	
 	/*	public boolean availCargo(String volume, String weight)	{
@@ -23,6 +35,8 @@ public class Ship {
 	}
 	
 	*/
+
+	
 	
 	public String toString()	{
 		return	shipID;

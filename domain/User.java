@@ -16,5 +16,22 @@ public class User {
 	String weight = "850";
 	sas.placeOrder(endLoc,startLoc,endDate,volume,weight);
 	}
+
+
+	private String ID, Name, Adress;
+
+	public User(String ID, String Name, String Adress){
+	    this.ID = ID;
+	    this.Name = Name;
+	    this.Adress = Adress;
 	}
+
+	public String toString()
+	{
+	    String str = "ID: " + ID + "\n Name: " + Name + "\n Adress:"
+		    + Adress;
+
+	    return str;
+	}
+}
 
