@@ -19,9 +19,7 @@ public class Sas {
 
 	private Map<String , Ship> ships = new HashMap<String , Ship >( ) ;
 	
-	public Sas ()	{
-	
-	}
+	public Sas (){}
 	
 	public void setUp() throws Exception	{
 	ship = new Ship("1","50000", "100000");
@@ -77,7 +75,8 @@ public class Sas {
 	    ships.put("s2",s2);
 	    //lægger skibe i hashmap
 
-	    System.out.print(findShip(shipID));
+	    System.out.println(findShip(shipID));
+	    //find skib frem
 
 	}
 
