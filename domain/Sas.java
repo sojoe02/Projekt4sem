@@ -23,9 +23,11 @@ public class Sas {
 	
 	}
 	
-	public void setUp()	{
+	public void setUp() throws Exception	{
 	ship = new Ship("1","50000", "100000");
 	//ships.put( ship.getShipsID(),ship) ;
+	
+
 	}
 	
 	
@@ -83,6 +85,8 @@ public class Sas {
 	    return ships.get(ShipID);
 
 	}
+
+
 
 }
 

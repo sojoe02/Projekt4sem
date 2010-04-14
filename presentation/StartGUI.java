@@ -11,6 +11,11 @@
 
 package presentation;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+
 /**
  *
  * @author Zagadka
@@ -71,6 +76,13 @@ public class StartGUI extends javax.swing.JFrame {
 
     private void LavOrdreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LavOrdreActionPerformed
         // TODO add your handling code here:
+	System.out.println("sdsdsd");
+	ConnectServer connectServer = new ConnectServer();
+	try {
+	    connectServer.conServer();
+	} catch (Exception ex) {
+	    Logger.getLogger(StartGUI.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }//GEN-LAST:event_LavOrdreActionPerformed
 
     /**
