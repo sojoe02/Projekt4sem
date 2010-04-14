@@ -2,43 +2,43 @@ package domain;
 
 import java.util.ArrayList;
 
-
 public class Ship {
 
-	private String shipID;
+    private String shipID;
 
-	private Cargo cargo;	//skibets Last
+    private Cargo cargo;	//skibets Last
 
-	
-	
-	public Ship (String shipID, String currentvolume, String currentweight)
-	{
-	    this.shipID = shipID;
+    public Ship(String shipID, String currentvolume, String currentweight) {
+	this.shipID = shipID;
 
-	    cargo = new Cargo(currentvolume, currentweight);
+	cargo = new Cargo(currentvolume, currentweight);
+    }
+
+    public String getShipID() {
+
+	return shipID;
+
+    }
+
+    public void getCargo() {
+    }
+
+    public boolean availCargo(String volume, String weight) {
+	if (cargo.availCargo(volume, weight) == true) {
+	    return true;
 	}
+	return false;
 
-	public String getShipsID(){
-		return shipID;
-	}
-	public void getCargo()
-	{
+    }
 
-	}
-	
-	/*	public boolean availCargo(String volume, String weight)	{
-			if (cargo.availCargo(volume, weight)== true) {
-			return true;	
-		}
-		
-		
-	}
-	
-	*/
+    public void updateShip(String volume, String weight) {
+	cargo.updateShip(volume, weight);
+    }
 
-	
-	
-	public String toString()	{
-		return	shipID;
-	}
+    public String toString() {
+	return shipID;
+
+    }
 }
+	
+	
