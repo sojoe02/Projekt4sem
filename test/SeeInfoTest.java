@@ -18,6 +18,11 @@ public class SeeInfoTest {
 
 	Container con1 = new Container("A121",dan,"A1","Candy");
 	Container con2 = new Container("B121",dan,"B2","Telephones");
+
+	ArrayList test = new ArrayList();
+
+	test.add(cargo.getAllContainer());
+	System.out.print(test);
 	
 
 	

@@ -44,6 +44,7 @@ public class Cargo {
 	    Iterator<Container> itr = c.iterator();
 	    while(itr.hasNext())
 		return  itr.next();
+	    return null;
 	}
 
 
