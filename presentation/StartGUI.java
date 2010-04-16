@@ -11,6 +11,7 @@
 
 package presentation;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,10 @@ import java.util.logging.Logger;
  * @author Zagadka
  */
 public class StartGUI extends javax.swing.JFrame {
+
+    private String metodeChoose;
+ArrayList<String> clientChoose = new ArrayList<String>();
+
 
     /** Creates new form StartGUI */
     public StartGUI() {
@@ -38,6 +43,16 @@ public class StartGUI extends javax.swing.JFrame {
 
         LavOrdre = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jstartloc = new javax.swing.JTextField();
+        jendLoc = new javax.swing.JTextField();
+        jendDate = new javax.swing.JTextField();
+        jvolume = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jweight = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,15 +65,46 @@ public class StartGUI extends javax.swing.JFrame {
 
         jLabel1.setText("Laver en ordre");
 
+        jstartloc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jstartlocActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("startLoc");
+
+        jLabel3.setText("endLoc");
+
+        jLabel4.setText("endDate");
+
+        jLabel5.setText("volume");
+
+        jLabel6.setText("weight");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(LavOrdre)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jweight, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jendDate, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jvolume, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jendLoc, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jstartloc)
+                    .addComponent(LavOrdre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))))
                 .addContainerGap(110, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -68,7 +114,28 @@ public class StartGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(LavOrdre)
                     .addComponent(jLabel1))
-                .addContainerGap(192, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jstartloc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jendLoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jendDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jvolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)))
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jweight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
@@ -76,14 +143,29 @@ public class StartGUI extends javax.swing.JFrame {
 
     private void LavOrdreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LavOrdreActionPerformed
         // TODO add your handling code here:
-	System.out.println("sdsdsd");
-	ConnectServer connectServer = new ConnectServer();
+	
+	
+	ComToServer comToServer = new ComToServer();
 	try {
-	    connectServer.conServer();
+	    metodeChoose = "1";
+
+	
+	clientChoose.add(metodeChoose);
+	clientChoose.add(jstartloc.getText());
+	clientChoose.add(jendLoc.getText());
+	clientChoose.add(jendDate.getText());
+	clientChoose.add(jvolume.getText());
+	clientChoose.add(jweight.getText());
+
+	    comToServer.connectToServer(clientChoose);
 	} catch (Exception ex) {
 	    Logger.getLogger(StartGUI.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }//GEN-LAST:event_LavOrdreActionPerformed
+
+    private void jstartlocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jstartlocActionPerformed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_jstartlocActionPerformed
 
     /**
     * @param args the command line arguments
@@ -99,6 +181,16 @@ public class StartGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LavOrdre;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField jendDate;
+    private javax.swing.JTextField jendLoc;
+    private javax.swing.JTextField jstartloc;
+    private javax.swing.JTextField jvolume;
+    private javax.swing.JTextField jweight;
     // End of variables declaration//GEN-END:variables
 
 }

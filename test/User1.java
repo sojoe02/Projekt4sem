@@ -12,10 +12,11 @@ import domain.*;
 public class User1 {
 
      public static void main (String[] args) throws Exception {
-	 
-	 RunServer runS = new RunServer();
-	 runS.runServer();
-	 runS.runSas();
+
+	 User admin = new User("123","Dan","Odense");
+	 Sas sas = new Sas(admin);
+	 sas.setUp();
+
 	 
      }
 }
