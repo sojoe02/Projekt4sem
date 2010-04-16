@@ -10,6 +10,8 @@ public class Cargo {
     private Map<String, Container> containers = new HashMap<String, Container>();
     private int currentvolume;
     private int currentweight;
+    //Den Bruger som ejer containeren
+    private Container currenContainer;
 
     public Cargo(String currentvolume, String currentweight) {
 	this.currentvolume = Integer.parseInt(currentvolume);
@@ -27,23 +29,22 @@ public class Cargo {
 	return false;
     }
 
-    public void addContainer(String containerID, Container container) {
-	containers.put(containerID, container);
+    public void addContainer(String containerID, Container container,
+	    String userID, String content)
+    {
+	currenContainer = new Container(containerID, userID, content);
+	containers.put(containerID, container);	//laeg container i hashmap
     }
-//Skal bruges når man vil hent specifike containere
 
+    
+    //getContainer() bruges når man vil hent specifike containere
     public Container getContainer(String containerID) {
 	return containers.get(containerID);
 	//returnere et Container objekt
     }
 
-    public Container getAllContainer() {
-	Collection<Container> c = containers.values();
-	Iterator<Container> itr = c.iterator();
-	while (itr.hasNext()) {
-	    return itr.next();
-	}
-	return null;
+    public Map getAllContainer() {
+	return containers;  //returnere et hashmap
     }
 
     public void updateShip(String volume, String weight) {

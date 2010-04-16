@@ -1,92 +1,103 @@
 package domain;
 
-import java . util . * ;
+import java.util.*;
 
 public class Sas {
 
+    private String endLoc;
+    private String startLoc;
+    private String endDate;
+    private String volume;
+    private String weight;
+    Ship ship;
+    Order order;
+    private String totalPrice;
+    private User Admin;
+    //SAS administrator
 
-	private String endLoc;
-	private String startLoc;
-	private String endDate;
-	private	String volume;
-	private	String weight;
+    private User currentUser;
+    //Brugeren som er logget ind
 
+    private Map<String, Ship> ships = new HashMap<String, Ship>();
 
+    public Sas(User Admin) {
+	this.Admin = Admin;
+	//tilføj en Administrator, dvs. Rederiet
+    }
 
-	Ship ship;
-	Order order;
-	private String totalPrice;
-
-	private Map<String , Ship> ships = new HashMap<String , Ship >( ) ;
-	
-	public Sas (){}
-	
-	public void setUp() throws Exception	{
-	ship = new Ship("1","50000", "100000");
+    public void setUp() throws Exception {
+	ship = new Ship("1", "50000", "100000");
 	//ships.put( ship.getShipsID(),ship) ;
-	
 
+
+    }
+
+    public String placeOrder(String endLoc, String startLoc, String endDate, 
+	    String volume, String weight) {
+
+	this.endLoc = endLoc;
+	this.startLoc = startLoc;
+	this.endDate = endDate;
+	this.volume = volume;
+	this.weight = weight;
+	if (ship.availCargo(volume, weight) == true) {
 	}
-	
-	
-	
-	public String placeOrder(String endLoc, String startLoc, String endDate, String volume,
-		String weight)	{
-		
-		this.endLoc = endLoc;
-		this.startLoc = startLoc;
-		this.endDate = endDate;
-		this.volume = volume;
-		this.weight = weight;
-		if (ship.availCargo(volume,weight)==true)	{
-			
-		}
-		
-	return totalPrice =calcPrice(volume, weight,startLoc,endLoc);
 
-		
+	return totalPrice = calcPrice(volume, weight, startLoc, endLoc);
+
+
 	//	ArrayList<String> shipsList = new ArrayList<String >( ) ;	
 	//	shipsList.add(ships.get("1").toString());
+    }
+
+    public String calcPrice(String volume, String weight, String startLoc,
+	    String endLoc) {
+	return "5";
+    }
+
+    public String chooseDate(String date) {
+
+	ship.updateShip(volume, weight);
+
+	order = new Order(endLoc, startLoc, date, volume, weight);
+
+	String orderID = order.getOrderID();
+
+	return "Confirm";
+    }
+
+    public void seeShipInfo(String shipID, User currentUser) {
+	Ship currentShip = findShip(shipID);
+
+	//Foelgende er for Admin
+	if (currentUser == Admin)
+	{
+	    Collection c = currentShip.getCargo().getAllContainer().values();
+	    Iterator itr = c.iterator();
+
+	    if (itr.hasNext()) {
+		System.out.println(itr.next());
+	    }
+	    else{
+		System.out.println("Skibet indeholder ingen Container");
+	    }
 	}
 
-
-	public String calcPrice (String volume, String weight, String startLoc,String endLoc)	{
-	    return "5";
-	}
-
-	 public String chooseDate (String date)	{
-
-	    ship.updateShip(volume,weight);
-
-	    order = new Order(endLoc, startLoc, date,volume,weight);
-
-	   String orderID = order.getOrderID();
-
-	   return "Confirm";
-	 }
-	public void seeShipInfo(String shipID){
-	    Ship currentship = null;
-
-	    Ship s1 = new Ship("s1","1000","45000");
-	    Ship s2 = new Ship("s2","2000","30000");
-	    //tilføj test skibe
-
-	    ships.put("s1",s1);
-	    ships.put("s2",s2);
-	    //lægger skibe i hashmap
-
-	    System.out.println(findShip(shipID));
-	    //find skib frem
+	//Foelgende er for andre end Admin, dvs. Kunden
+	else{
+	    currentUser.getUserID();
+	   
 
 	}
+    }
 
-	private Ship findShip(String ShipID){
-	    return ships.get(ShipID);
+    public Ship findShip(String shipID) {
+	return ships.get(shipID);
+    }
 
-	}
-
-
-
+    public void addShip(String shipID, Ship ship) {
+	ships.put(shipID, ship);
+    }
 }
 
 

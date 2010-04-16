@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Ship {
 
@@ -10,8 +11,8 @@ public class Ship {
 
     public Ship(String shipID, String currentvolume, String currentweight) {
 	this.shipID = shipID;
-
 	cargo = new Cargo(currentvolume, currentweight);
+	//Opret en last til et skib
     }
 
     public String getShipID() {
@@ -20,7 +21,8 @@ public class Ship {
 
     }
 
-    public void getCargo() {
+    public Cargo getCargo() {
+	return cargo;
     }
 
     public boolean availCargo(String volume, String weight) {
@@ -36,7 +38,7 @@ public class Ship {
     }
 
     public String toString() {
-	return shipID;
+	return "Skibs id:" + shipID;
 
     }
 }
