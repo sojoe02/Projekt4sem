@@ -5,17 +5,16 @@
 
 package test;
 import domain.*;
+
 /**
  *
  * @author Mats l
  */
-public class User1 {
+public class createdatabase {
 
-     public static void main (String[] args) throws Exception {
-	 
+     public static void main (String[] args)	{
 	 Sas sas = new Sas();
-	 sas.setUp();
+	 sas.createDatabase();
 
-	 
      }
 }
