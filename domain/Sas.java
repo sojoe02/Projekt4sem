@@ -2,8 +2,12 @@ package domain;
 
 import java.util.*;
 
-import java.sql.*;
+
 import java.util.ArrayList;
+import Foundation.*;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class Sas {
 
@@ -20,12 +24,16 @@ public class Sas {
     private User currentUser;
     //Brugeren som er logget ind
     private Map<String, Ship> ships = new HashMap<String, Ship>();
+
     private Map<String, User> users = new HashMap<String, User>();
     private static Connection con;
     private static String url = "jdbc:mysql://" + "localhost" + ":3306/" + "sas";
     private static String databaseUser = "root";
     private static String password = "abc";
-    ArrayList<String> clientChoose = new ArrayList<String>();
+    private ArrayList<String> dates = new ArrayList<String>();
+    private ArrayList<String> clientChoose = new ArrayList<String>();
+
+
 
     public Sas(User Admin) {
 	this.Admin = Admin;
@@ -34,34 +42,86 @@ public class Sas {
 
     public void setUp() throws Exception {
 	RunServer runS = new RunServer();
-	clientChoose = runS.runServer();
-	//String currentMetode =clientChoose.substring(0,1);
-	//if (currentMetode.equals("1"))   {
+
+	clientChoose = runS.getClientChoose();
+
+	ArrayList ab = new ArrayList();
+	ab.add("asdsad");
+	ab.add("sdsdsssss");
+	ab = clientChoose;
+	try {
+	    System.out.println((ab.get(1)));
+	} catch (IndexOutOfBoundsException e) {
+	    System.out.print("fejl");
+	}
+	clientChoose.clear();
+
+	clientChoose.add("1");
+	clientChoose.add("Odense");
+	clientChoose.add("Amsterdam");
+	clientChoose.add("25-04-2010");
+	clientChoose.add("4000");
+	clientChoose.add("800");
 
 
-	// placeOrder(clientChoose);
-	// System.out.println("qwerrtt");
 
-	System.out.println("god stil ");
+	if (clientChoose.get(0).equals("1")) {
+	    dates = placeOrder();
+	    System.out.print("virker");
+	}
+
+
+
+	//int sd = 1;
+	//System.out.println((String)clientChoose.get(sd));
+
     }
+
 
     public String placeOrder(String endLoc, String startLoc, String endDate,
 	    String volume, String weight) {
+
+    public ArrayList placeOrder() throws SQLException {
+
+	ArrayList<String> allshipList = new ArrayList<String>();
+	sas_database database = new sas_database();
+
+	allshipList =(database.connectToDatabase_allship());
+
+	   for (int i = 0; i < allshipList.size(); i++) {
+	       database.getShipInfo(Integer.parseInt(allshipList.get(i)));
+	       ship = new Ship(database.getShipid(), database.getName(), database.getCaptain(), database.getTotalvolume(), database.getTotalweight(), database.getDestinationList(), database.getDatoList());
+		ships.put(allshipList.get(i), ship);
+		System.out.println("gentagelse");
+		System.out.println(ship.toString());
+	   }
+
+
 
 	this.endLoc = endLoc;
 	this.startLoc = startLoc;
 	this.endDate = endDate;
 	this.volume = volume;
 	this.weight = weight;
-	if (ship.availCargo(volume, weight) == true) {
-	}
-
-	return totalPrice = calcPrice(volume, weight, startLoc, endLoc);
-
-
-	//	ArrayList<String> shipsList = new ArrayList<String >( ) ;	
-	//	shipsList.add(ships.get("1").toString());
+	//if (ship.availCargo(volume, weight) == true) {
+	return clientChoose;
     }
+
+    //return totalPrice = calcPrice(volume, weight, startLoc, endLoc);
+    //	ArrayList<String> shipsList = new ArrayList<String >( ) ;
+    //	shipsList.add(ships.get("1").toString());
+
+    
+
+
+
+
+
+
+
+
+
+
 
     public String calcPrice(String volume, String weight, String startLoc,
 	    String endLoc) {
@@ -126,6 +186,7 @@ public class Sas {
     }
      *
      */
+
     public Ship findShip(String ShipID) {
 	return ships.get(ShipID);
     }
@@ -235,8 +296,16 @@ public class Sas {
 	}
     }
 
+    private Ship findShip(String ShipID) {
+	return ships.get(ShipID);
+    }
+
+   
+
+
     public void addShip(String shipID, Ship ship) {
 	ships.put(shipID, ship);
+
 
 	try {
 	    Statement statement = con.createStatement();
@@ -251,9 +320,12 @@ public class Sas {
 	}
     }
 
+
     public void addShipTemp(String shipID, Ship Ship) {
 	ships.put(shipID, Ship);
     }
+
+    
 }
 
 

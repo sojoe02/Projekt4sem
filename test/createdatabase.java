@@ -4,7 +4,7 @@
  */
 
 package test;
-import domain.*;
+import Foundation.*;
 
 /**
  *
@@ -13,8 +13,8 @@ import domain.*;
 public class createdatabase {
 
      public static void main (String[] args)	{
-	 Sas sas = new Sas();
-	 sas.createDatabase();
+	 sas_database database = new sas_database();
+	 database.createDatabase();
 
      }
 }

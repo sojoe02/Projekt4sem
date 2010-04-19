@@ -65,11 +65,18 @@ ArrayList<String> clientChoose = new ArrayList<String>();
 
         jLabel1.setText("Laver en ordre");
 
+        jstartloc.setText("Odense");
         jstartloc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jstartlocActionPerformed(evt);
             }
         });
+
+        jendLoc.setText("Amsterdam");
+
+        jendDate.setText("25-04-2010");
+
+        jvolume.setText("4000");
 
         jLabel2.setText("startLoc");
 
@@ -78,6 +85,8 @@ ArrayList<String> clientChoose = new ArrayList<String>();
         jLabel4.setText("endDate");
 
         jLabel5.setText("volume");
+
+        jweight.setText("800");
 
         jLabel6.setText("weight");
 

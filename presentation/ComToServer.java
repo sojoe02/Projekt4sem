@@ -14,12 +14,16 @@ import java.util.ArrayList;
 public class ComToServer {
     private String ipAddress = "localhost";
     private final int port = 6789;
-    ArrayList<String> clientChoose = new ArrayList<String>();
+    //ArrayList<String> clientChoose = new ArrayList<String>();
 
-    private String metodeChoose, startLoc, endLoc, endDate, volume, weight;
+   // private String metodeChoose, startLoc, endLoc, endDate, volume, weight;
+    ObjectOutputStream oos = null;
+      ObjectInputStream ois = null;
+      Socket socket = null;
+     // Date date = null;
 
 
-    Socket socket;
+   
     ClientServerCom csc;
 //private ClientChoose clientChoose;
 
@@ -35,16 +39,28 @@ public class ComToServer {
 
     try {
       socket = new Socket(ipAddress, port);
-          System.out.println("\nClient er klar");
-      csc = new ClientServerCom(socket);
+          System.out.println("\nClient are ready to connect to server");
+      // csc = new ClientServerCom(socket);
 
       //clientChoose = csc.readFromSocket();
       	//System.out.println(person.getBirthYear());
-      csc.writeToSocket(clientChoose);
+         // open I/O streams for objects
+        oos = new ObjectOutputStream(socket.getOutputStream());
+        ois = new ObjectInputStream(socket.getInputStream());
+        // read an object from the server
 
-      socket.close();
-    }
-    catch(IOException e) { e.printStackTrace(); }
+        //System.out.print("The date is: " + date);
+         oos.writeObject(clientChoose);
+         oos.flush();
+         // close streams and connections
+         ois.close();
+         oos.close();
+         socket.close();
+
+}
+catch(Exception e) {
+        System.out.println(e.getMessage());
+      }
     }
 }
 
