@@ -35,4 +35,8 @@ public class Container {
     public String getContainerID(){
 	 return containerID;
     }
+
+    public String getContent(){
+	return content;
+    }
 }
