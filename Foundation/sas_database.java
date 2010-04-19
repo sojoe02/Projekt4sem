@@ -27,42 +27,29 @@ public class sas_database {
     }
 
     public void createDatabase() {
-//Finder Driveren her
-	try {
-	    Class.forName("com.mysql.jdbc.Driver");
-	    System.out.println("MySQL Driver Found");
-	} catch (java.lang.ClassNotFoundException e) {
-	    System.out.println("MySQL JDBC Driver not found ... ");
-	}
 
-	//Kontakter MySQL databasen her
-	try {
+	connectToSas();
+	
 
-	    con = DriverManager.getConnection(url, databaseUser, password);
-
-	    System.out.println("Connection established to " + url + "...");
-	} catch (java.sql.SQLException e) {
-	    System.out.println("Connection couldn't be established to " + url + e.toString());
-	}
-
-	// create table all ship
-
+	
+	// Drop sas tabel
 	try {
 	    Statement statement = con.createStatement();
 	    String dropString = "DROP TABLE allship;";
 	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! ");
+	    System.err.println("Got an exception! in the metode to drop sas tabel. ");
 	    System.err.println(e.getMessage());
 	}
 
+	    // create table all ship
 	try {
 	    Statement statement = con.createStatement();
 	    String createString = "CREATE TABLE allship (ship_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 		    + "Name VARCHAR(100)," + "Captain VARCHAR(100)," + "Totalvolume VARCHAR(100)," + "Totalweight VARCHAR(100));";
 	    statement.executeUpdate(createString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved createallship ");
+	    System.err.println("Got an exception! in creating sas tabel. ");
 	    System.err.println(e.getMessage());
 	}
 
@@ -73,7 +60,7 @@ public class sas_database {
 	    insertString = "INSERT INTO allship (Name, Captain, Totalvolume, Totalweight) VALUES ('I ser mig ikke', 'Stefan larsen', '12000 m3', ' 10 tons');";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved iinsert ");
+	    System.err.println("Got an exception! in insert data on allship tabel. ");
 	    System.err.println(e.getMessage());
 	}
 
@@ -136,6 +123,7 @@ public class sas_database {
 	    statement.executeUpdate(insertString);
 	    insertString = "INSERT INTO 2_ship (Destination, Dato) VALUES ('Amsterdam', '25-15-2010');";
 	    statement.executeUpdate(insertString);
+
 	} catch (SQLException e) {
 	    System.err.println("Got an exception! ved insert ");
 	    System.err.println(e.getMessage());
@@ -147,42 +135,30 @@ public class sas_database {
 
 	ArrayList<String> allshipList = new ArrayList<String>();
 
-	//Finder Driveren her
-	try {
-	    Class.forName("com.mysql.jdbc.Driver");
-	    System.out.println("MySQL Driver Found");
-	} catch (java.lang.ClassNotFoundException e) {
-	    System.out.println("MySQL JDBC Driver not found ... ");
-	}
-
-	//Kontakter MySQL databasen her
-	try {
-
-	    con = DriverManager.getConnection(url, databaseUser, password);
-
-	    System.out.println("Connection established to " + url + "...");
-	} catch (java.sql.SQLException e) {
-	    System.out.println("Connection couldn't be established to " + url + e.toString());
-	}
+	connectToSas();
 
 	try {
-	    String sqlStmt = "SELECT ship_id,Name,Captain, Totalvolume, Totalweight  FROM allship";
+	    String sqlStmt = "SELECT ship_id, Name, Captain, Totalvolume, Totalweight  FROM allship";
 	    Statement stmt;
 	    stmt = con.createStatement();
 	    ResultSet resultSet;
 	    resultSet = stmt.executeQuery(sqlStmt);
 
+	    System.out.println();
 
-	    while (resultSet.next()) {
+	    while (resultSet.first()) {
 		Name = resultSet.getString("Name");
+		System.out.println(Name + "   tttttttttteeeeeeeexxxxxxxxtttt");
 		Captain = resultSet.getString("Captain");
 		ship_id = resultSet.getInt("ship_id");
 		Totalvolume = resultSet.getString("Totalvolume");
 		Totalweight = resultSet.getString("Totalweight");
 		System.out.println("allship [ship_id, Name, Captian]= " + "(" + ship_id + ")" + Name + Captain + Totalvolume + Totalweight);
 		allshipList.add(Integer.toString(ship_id));
-	    }
-	    resultSet.close();
+
+		System.out.println();
+}
+	    
 	} catch (SQLException e) {
 	    System.out.println("Error executing sql statement");
 	}
@@ -194,10 +170,17 @@ public class sas_database {
 
 	ArrayList<String> DestinationList = new ArrayList<String>();
 	ArrayList<String> DatoList = new ArrayList<String>();
-	ConnectToSas();
+
+	connectToSas();
+	
 	String ship__id = Integer.toString(ship_id);
+	
+
 	try {
-	    String sqlStmt = "SELECT Destination, Dato  FROM " + ship__id + "_ship";
+	    String sqlStmt = "SELECT Destination, Dato FROM " + ship__id + "_ship";
+
+	    System.out.println("\nSELECT Destination, Dato FROM " + ship__id + "_ship" );
+
 	    Statement stmt;
 	    stmt = con.createStatement();
 	    ResultSet resultSet;
@@ -208,7 +191,7 @@ public class sas_database {
 		Destination = resultSet.getString("Destination");
 		Dato = resultSet.getString("Dato");
 
-		System.out.println("1_ship [ Destination, Dato]= " + Destination + Dato);
+		System.out.println(ship__id + "_ship [ Destination, Dato]= " + Destination + " " + Dato + " " + Name + " " + Captain + " " + Totalvolume + " " + Totalweight + " " + Destination + " ");
 
 		DestinationList.add(Destination);
 		DatoList.add(Dato);
@@ -220,7 +203,7 @@ public class sas_database {
 
     }
 
-    public void ConnectToSas() {
+    public void connectToSas() {
 	//Finder Driveren her
 	try {
 	    Class.forName("com.mysql.jdbc.Driver");
@@ -235,6 +218,7 @@ public class sas_database {
 	    con = DriverManager.getConnection(url, databaseUser, password);
 
 	    System.out.println("Connection established to " + url + "...");
+
 	} catch (java.sql.SQLException e) {
 	    System.out.println("Connection couldn't be established to " + url + e.toString());
 	}

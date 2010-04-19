@@ -22,10 +22,8 @@ public class Sas {
     private User currentUser;
     //Brugeren som er logget ind
     private Map<String, Ship> ships = new HashMap<String, Ship>();
-   
-    private ArrayList<String> dates = new ArrayList<String>();
+    private ArrayList<String> dateList = new ArrayList<String>();
     private ArrayList<String> clientChoose = new ArrayList<String>();
-
 
     public Sas(User Admin) {
 	this.Admin = Admin;
@@ -35,31 +33,18 @@ public class Sas {
     public void setUp() throws Exception {
 	RunServer runS = new RunServer();
 
+
 	clientChoose = runS.getClientChoose();
 
-	ArrayList ab = new ArrayList();
-	ab.add("asdsad");
-	ab.add("sdsdsssss");
-	ab = clientChoose;
 	try {
-	    System.out.println((ab.get(1)));
 	} catch (IndexOutOfBoundsException e) {
-	    System.out.print("fejl");
+	    System.out.print(e.getMessage());
 	}
-	clientChoose.clear();
-
-	clientChoose.add("1");
-	clientChoose.add("Odense");
-	clientChoose.add("Amsterdam");
-	clientChoose.add("25-04-2010");
-	clientChoose.add("4000");
-	clientChoose.add("800");
-
 
 
 	if (clientChoose.get(0).equals("1")) {
-	    dates = placeOrder();
-	    System.out.print("virker");
+	    dateList = placeOrder();
+
 	}
 
 
@@ -74,42 +59,50 @@ public class Sas {
 	ArrayList<String> allshipList = new ArrayList<String>();
 	sas_database database = new sas_database();
 
-	allshipList =(database.connectToDatabase_allship());
+	allshipList = (database.connectToDatabase_allship());
 
-	   for (int i = 0; i < allshipList.size(); i++) {
-	       database.getShipInfo(Integer.parseInt(allshipList.get(i)));
-	       ship = new Ship(database.getShipid(), database.getName(), database.getCaptain(), database.getTotalvolume(), database.getTotalweight(), database.getDestinationList(), database.getDatoList());
-		ships.put(allshipList.get(i), ship);
-		System.out.println("gentagelse");
-		System.out.println(ship.toString());
-	   }
+	System.out.println();
+	System.out.println("bbbbbbbbbbbbbbbbaaaaaa " + database.getName());
+	System.out.println();
 
 
-	this.endLoc = endLoc;
-	this.startLoc = startLoc;
-	this.endDate = endDate;
-	this.volume = volume;
-	this.weight = weight;
+	
+
+	//for (int i = 0; i < allshipList.size(); i++) {
+	    
+	    System.out.println(allshipList.get(0));
+	
+
+	    database.getShipInfo(Integer.parseInt(allshipList.get(0)));
+
+	    ship = new Ship(database.getShipid(), database.getName(), database.getCaptain(), database.getTotalvolume(), database.getTotalweight(), database.getDestinationList(), database.getDatoList());
+	    ships.put(allshipList.get(0), ship);
+
+	     System.out.println("skift");
+
+	   // System.out.println(allshipList.get(1));
+
+
+	  //  database.getShipInfo(Integer.parseInt(allshipList.get(1)));
+
+	   // ship = new Ship(database.getShipid(), database.getName(), database.getCaptain(), database.getTotalvolume(), database.getTotalweight(), database.getDestinationList(), database.getDatoList());
+	    //ships.put(allshipList.get(1), ship);
+
+	    
+	   
+	   
+	//}
+	 //System.out.println((ships.get("1").toString()));
+
+	return allshipList;
+
 	//if (ship.availCargo(volume, weight) == true) {
-	return clientChoose;
+
     }
 
     //return totalPrice = calcPrice(volume, weight, startLoc, endLoc);
     //	ArrayList<String> shipsList = new ArrayList<String >( ) ;
     //	shipsList.add(ships.get("1").toString());
-
-    
-
-
-
-
-
-
-
-
-
-
-
     public String calcPrice(String volume, String weight, String startLoc,
 	    String endLoc) {
 	return "5";
@@ -161,20 +154,16 @@ public class Sas {
 	return ships.get(ShipID);
     }
 
-   
-
     public void addShip(String shipID, Ship ship) {
 	ships.put(shipID, ship);
 
-	
+
 
 
 
 
 
     }
-
-    
 }
 
 
