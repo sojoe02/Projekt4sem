@@ -9,8 +9,14 @@ package Foundation;
  * @author Mats l
  */
 import java.sql.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import domain.*;
+import java.text.DateFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class sas_database {
 
@@ -29,44 +35,90 @@ public class sas_database {
     public void createDatabase() {
 
 	connectToSas();
-	
 
-	
-	// Drop sas tabel
 	try {
 	    Statement statement = con.createStatement();
-	    String dropString = "DROP TABLE allship;";
+	    String dropString = "DROP TABLE Ordre;";
 	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! in the metode to drop sas tabel. ");
+	    System.err.println("Got an exception! ");
 	    System.err.println(e.getMessage());
 	}
 
-	    // create table all ship
+	//Create ship table
 	try {
 	    Statement statement = con.createStatement();
-	    String createString = "CREATE TABLE allship (ship_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-		    + "Name VARCHAR(100)," + "Captain VARCHAR(100)," + "Totalvolume VARCHAR(100)," + "Totalweight VARCHAR(100));";
-	    statement.executeUpdate(createString);
+	    String dropString = "DROP TABLE Ship;";
+	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! in creating sas tabel. ");
+	    System.err.println("Got an exception!1 ");
 	    System.err.println(e.getMessage());
 	}
 
 	try {
 	    Statement statement = con.createStatement();
-	    String insertString = "INSERT INTO allship (Name, Captain, Totalvolume, Totalweight) VALUES ('god vind','Dan nyguen','10000 m3', ' 8 tons');";
-	    statement.executeUpdate(insertString);
-	    insertString = "INSERT INTO allship (Name, Captain, Totalvolume, Totalweight) VALUES ('I ser mig ikke', 'Stefan larsen', '12000 m3', ' 10 tons');";
+	    String dropString = "DROP TABLE Schedulling;";
+	    statement.executeUpdate(dropString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception!1 ");
+	    System.err.println(e.getMessage());
+	}
+
+
+
+	try {
+	    Statement statement = con.createStatement();
+	    String dropString = "CREATE TABLE Ship (" +
+		    "ShipID INT(4)," +
+		    "ShipName VARCHAR(50) NOT NULL," +
+		    "ShipType VARCHAR(50) NOT NULL," +
+		    "Captain VARCHAR(70) NOT NULL," +
+		    "CurrentContainers INT(6) NOT NULL," +
+		    "MaxContainer INT(6) NOT NULL," +
+		    "CurrentWeight INT(5) NOT NULL," +
+		    "MaxWeight INT(5) NOT NULL," +
+		    "VolumeOfContainer INT(4) NOT NULL," +
+		    "PRIMARY KEY (ShipID));";
+	    statement.executeUpdate(dropString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception! ");
+	    System.err.println(e.getMessage());
+	}
+
+	
+
+
+		try {
+	    Statement statement = con.createStatement();
+	    String insertString = "INSERT INTO Ship VALUES" +
+		    " (1, 'Neil Young', 'ALM Transport', 'Dan Nyigen', 0, 1000, " +
+		    "700, 1500, 60)," +
+		    "(2, 'Melua', 'ALM Transport', 'Stefan Larsen', 0, 1250, " +
+		    "800, 1800, 70)," +
+		    "(3, 'Madonna', 'ALM Transport', 'Søren Jørgensen', 0, " +
+		    "700, 500, 1100, 50)," +
+		    "(4, 'Jim Morrison', 'ALM Transport', 'Mats Larsen', 0, " +
+		    "1500, 900, 1900, 80)," +
+		    "(5, 'Kurt Cubain', 'Olie Transport', 'Marius Vestergaard'," +
+		    " 0, 250, 1100, 2500, 120)";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! in insert data on allship tabel. ");
+	    System.err.println("Got an exception!  ");
 	    System.err.println(e.getMessage());
 	}
 
+// Create order table
+
+
+
+
 	try {
 	    Statement statement = con.createStatement();
-	    String dropString = "DROP TABLE 1_ship;";
+	    String dropString = "CREATE TABLE Ordre (" +
+		    "OrderID int(5) NOT NULL," +
+		    "ShipID INT(4)," +
+		    "CONSTRAINT FK_ShipID FOREIGN KEY (ShipID) REFERENCES " +
+		    "Ship (ShipID) ON DELETE SET NULL ON UPDATE CASCADE);" ;
 	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception! ");
@@ -75,61 +127,131 @@ public class sas_database {
 
 	try {
 	    Statement statement = con.createStatement();
-	    String createString = "CREATE TABLE 1_ship (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-		    + "Destination VARCHAR(100), Dato VARCHAR(100));";
-	    statement.executeUpdate(createString);
+	    String insertString = "INSERT INTO Ordre  VALUES" +
+		    " (1,5);";
+	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved create ");
+	    System.err.println("Got an exception!  ");
 	    System.err.println(e.getMessage());
 	}
 
-
-	try {
+try {
 	    Statement statement = con.createStatement();
-	    String insertString = "INSERT INTO 1_ship (Destination, Dato) VALUES ('Odense','15-04-2010');";
-	    statement.executeUpdate(insertString);
-	    insertString = "INSERT INTO 1_ship (Destination, Dato) VALUES ('Hamburg', '20-15-2010');";
-	    statement.executeUpdate(insertString);
-	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved insert ");
-	    System.err.println(e.getMessage());
-	}
-
-
-	//Create table called 2_ship
-
-	try {
-	    Statement statement = con.createStatement();
-	    String dropString = "DROP TABLE 2_ship;";
+	    String dropString = "CREATE TABLE Schedulling (" +
+		    "Date Date(8) NOT NULL," +
+		    "Harbour VARCHAR(30)" +
+		    "ShipID INT(4)," +
+		    "CONSTRAINT FK_Harbour FOREIGN KEY (Harbour) REFERENCES " +
+		    "Harbour (Harbour) ON DELETE SET NULL ON UPDATE CASCADE," +
+		    "CONSTRAINT FK_ShipID FOREIGN KEY (ShipID) REFERENCES " +
+		    "Ship (ShipID) ON DELETE SET NULL ON UPDATE CASCADE);" ;
 	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception! ");
 	    System.err.println(e.getMessage());
 	}
-
-	try {
-	    Statement statement = con.createStatement();
-	    String createString = "CREATE TABLE 2_ship (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-		    + "Destination VARCHAR(100), Dato VARCHAR(100));";
-	    statement.executeUpdate(createString);
-	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved create ");
-	    System.err.println(e.getMessage());
-	}
-
-	try {
-	    Statement statement = con.createStatement();
-	    String insertString = "INSERT INTO 2_ship (Destination, Dato) VALUES ('Odense','17-04-2010');";
-	    statement.executeUpdate(insertString);
-	    insertString = "INSERT INTO 2_ship (Destination, Dato) VALUES ('Amsterdam', '25-15-2010');";
-	    statement.executeUpdate(insertString);
-
-	} catch (SQLException e) {
-	    System.err.println("Got an exception! ved insert ");
-	    System.err.println(e.getMessage());
-
-	}
+	
     }
+
+    public ArrayList findAvrilShip(ArrayList allshiipList, String startLoc, String endLoc)	{
+
+ArrayList<String> dateChoose = new ArrayList<String>();
+String afgang = null;
+String ankomst = null;
+try {
+    ResultSet resultSet;
+String sqlStmt = "SELECT * FROM 2_ship WHERE Destination= '" + startLoc + "'";
+Statement stmt;
+stmt = con.createStatement();
+
+resultSet = stmt.executeQuery(sqlStmt);
+
+while (resultSet.next()) {
+afgang= resultSet.getString("Dato");
+
+}
+System.out.println("sdsdsdsdsdsd " + afgang );
+} catch (SQLException e) {
+	    System.out.println("Error executing sql statement");
+	}
+
+try {
+    String sqlStmt = "SELECT * FROM 2_ship WHERE Destination= '" + endLoc + "'";
+Statement stmt;
+stmt = con.createStatement();
+ResultSet resultSet;
+resultSet = stmt.executeQuery(sqlStmt);
+
+while (resultSet.next()) {
+ankomst= resultSet.getString("Dato");
+
+}
+System.out.println("sdsdsdsdsdsd " + ankomst );
+} catch (SQLException e) {
+	    System.out.println("Error executing sql statement");
+	}
+
+DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+Date Dateafgang = null,Dateankomst = null;
+	try {
+	    Dateafgang = df.parse(afgang);
+	    Dateankomst = df.parse(ankomst);
+	} catch (ParseException ex) {
+
+	}
+
+if (Dateafgang.before(Dateankomst)) {
+    dateChoose.add(afgang);
+
+}
+}
+
+
+
+    
+
+
+
+    public ArrayList getAllShip()   {
+
+	ArrayList<String> allshipList = new ArrayList<String>();
+
+	try {
+	    String sqlStmt = "SELECT ship_id, Name, Captain, Totalvolume, Totalweight  FROM allship";
+	    Statement stmt;
+	    stmt = con.createStatement();
+	    ResultSet resultSet;
+	    resultSet = stmt.executeQuery(sqlStmt);
+
+
+
+	    while (resultSet.next()) {
+		Name = resultSet.getString("Name");
+		System.out.println(Name + "   tttttttttteeeeeeeexxxxxxxxtttt");
+		Captain = resultSet.getString("Captain");
+		ship_id = resultSet.getInt("ship_id");
+		Totalvolume = resultSet.getString("Totalvolume");
+		Totalweight = resultSet.getString("Totalweight");
+		System.out.println("allship [ship_id, Name, Captian]= " + "(" + ship_id + ")" + Name + Captain + Totalvolume + Totalweight);
+		allshipList.add(Integer.toString(ship_id));
+
+		System.out.println();
+}
+
+	} catch (SQLException e) {
+	    System.out.println("Error executing sql statement");
+	}
+	return allshipList;
+
+
+    }
+
+
+
+
+
+
+
 
     public ArrayList connectToDatabase_allship() throws SQLException {
 
@@ -146,7 +268,7 @@ public class sas_database {
 
 	    System.out.println();
 
-	    while (resultSet.first()) {
+	    while (resultSet.next()) {
 		Name = resultSet.getString("Name");
 		System.out.println(Name + "   tttttttttteeeeeeeexxxxxxxxtttt");
 		Captain = resultSet.getString("Captain");

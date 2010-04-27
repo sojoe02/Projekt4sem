@@ -16,14 +16,40 @@ public class ComToServer {
 
     private String ipAddress = "localhost";
     private final int port = 6789;
-    ObjectOutputStream oos = null;
+   
     ObjectInputStream ois = null;
-    Socket socket = null;
+    
 
     public ComToServer() {
     }
 
     public void connectToServer(ArrayList clientChoose) throws Exception {
+
+
+	try{
+ Socket socket = new Socket(ipAddress,port);
+ OutputStream os = socket.getOutputStream();
+ ObjectOutputStream oos = new ObjectOutputStream(os);
+ SendObject sendObject = new SendObject();
+ oos.writeObject(sendObject);
+ oos.writeObject(new String("another object from the client"));
+ oos.close();
+ os.close();
+ socket.close();
+  }catch(Exception e){System.out.println(e);}
+ }
+ }
+
+
+
+
+
+
+
+
+
+
+
 
 
 	socket = new Socket(ipAddress, port);

@@ -56,8 +56,19 @@ public class Sas {
 
     public ArrayList placeOrder() throws SQLException {
 
+
 	ArrayList<String> allshipList = new ArrayList<String>();
 	sas_database database = new sas_database();
+
+	database.connectToSas();
+
+	allshipList = database.getAllShip();
+
+	database.findAvrilShip(allshipList, clientChoose.get(1),clientChoose.get(2));
+
+
+	
+/*
 
 	allshipList = (database.connectToDatabase_allship());
 
@@ -93,6 +104,9 @@ public class Sas {
 	//}
 	//System.out.println((ships.get("1").toString()));
 
+	 *
+	 *
+	 */
 	return allshipList;
 
 	//if (ship.availCargo(volume, weight) == true) {

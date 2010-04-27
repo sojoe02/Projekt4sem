@@ -16,22 +16,54 @@ public class RunServer {
 
     ArrayList<String> clientChoose = new ArrayList<String>();
     private final int port = 6789;
-    ServerSocket serversocket;
+    
 
     public RunServer() throws IOException {
-	serversocket = new ServerSocket(port);
-	System.out.println("Server listening on port " + port + ".");
+	
 
     }
 
     public ArrayList getClientChoose() throws Exception {
 
 
-	try {
-	    System.out.println("Waiting for connections.");
-	    Socket socket = serversocket.accept();
-	    System.out.println("Accepted a connection from: "
+	System.out.println("Server listening on port " + port + ".");
+	 
+ try {
+ServerSocket serversocket = new ServerSocket(port);
+  System.out.println("Waiting for connections.");
+ Socket socket = serversocket.accept();
+ System.out.println("Accepted a connection from: "
 		    + socket.getInetAddress());
+ InputStream is = socket.getInputStream();
+ ObjectInputStream ois = new ObjectInputStream(is);
+ SendObject sendObject = (SendObject)ois.readObject();
+ if (sendObject!=null){System.out.println("modtaget");}
+ System.out.println((String)ois.readObject());
+ is.close();
+ socket.close();
+ serversocket.close();
+ }catch(Exception e4){System.out.println(e4);}
+ }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+
+
+	try {
+	  
+	    Socket socket = serversocket.accept();
+	    
 	    Connect c = new Connect(socket);
 	} catch (Exception e) {
 	    System.out.println("A exception is catch in server accept. " + e.getMessage());
@@ -80,6 +112,8 @@ public class RunServer {
 	}
     }
 }
+	 * */
+
 
 
 

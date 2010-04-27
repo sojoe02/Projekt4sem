@@ -21,13 +21,18 @@ public class JavaToMySQL {
 
     public static void main(String[] arg) throws Exception {
 
+
+
+
+
+
+
 	try {
 	    Class.forName("com.mysql.jdbc.Driver");
 	    System.out.println("MySQL Driver Found");
 	} catch (java.lang.ClassNotFoundException e) {
 	    System.out.println("MySQL JDBC Driver not found ... ");
 	}
-
 
 //-----------------Kontakter MySQL databasen her---------------------------------------------
 	try {
@@ -38,64 +43,44 @@ public class JavaToMySQL {
 	} catch (java.sql.SQLException e) {
 	    System.out.println("Connection couldn't be established to " + url + e.toString());
 	}
-/*
+
+
+
+
+
 	try {
-Statement statement = con.createStatement();
-statement.executeUpdate("INSERT INTO shipinfo " + "VALUES ('3', 'Simpson')");
-
-	}
-	 catch (Exception e) {
-	    System.err.println("Got an exception! ");
-	    System.err.println(e.getMessage());
-	 }
-*/
-try {
-
-//Create table called my_table
-    Statement statement = con.createStatement();
-	String sql = "CREATE TABLE sas2(destination VARCHAR(254))";
-	statement.executeUpdate(sql);
-} 
-catch (SQLException e) {
-}
-
-
-	/*
-	
-
-
-	    Statement st = con.createStatement();
-	    st.executeUpdate("INSERT INTO shipinfo "
-		    + "VALUES (`1001`");
-	   
-
-	    con.close();
-	} catch (Exception e) {
-	    System.err.println("Got an exception! ");
+	    Statement statement = con.createStatement();
+	    String dropString = "DROP TABLE kunde;";
+	    statement.executeUpdate(dropString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception! in the metode to drop sas tabel.1 ");
 	    System.err.println(e.getMessage());
 	}
-	/*
 
-	 */
-    
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	try {
+	    Statement statement = con.createStatement();
+	    String dropString = "CREATE TABLE kunde (" +
+		    "`kunde_id` int(5) NOT NULL," +
+  "kunde_navn varchar(25)," +
+  "chef varchar(25)," +
+  "PRIMARY KEY (`kunde_id`))";
+	    statement.executeUpdate(dropString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception! in the metode to drop sas tabel.1 ");
+	    System.err.println(e.getMessage());
+	}
+
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+    }
+
 }
-}
-/*
-Connection conn = DriverManager.getConnection(
-"jdbc:mysql://localhost/PersonDB", "lb", "bl");
-String sqlStmt = "SELECT name,no FROM person";
-Statement stmt;
-stmt = conn.createStatement();
-ResultSet resultSet;
-resultSet = stmt.executeQuery(sqlStmt);
-String name;
-int no;
-while (resultSet.next()) {
-name = resultSet.getString(”name");
-no = resultSet.getInt(”no”);
-System.out.println("Person [name(no)]= " + name + "(" + no + ")");
-}
-}
- */
+
+
+
+
 
 
