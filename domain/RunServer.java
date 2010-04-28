@@ -7,6 +7,7 @@ package domain;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -14,21 +15,28 @@ import java.util.ArrayList;
  */
 public class RunServer {
 
-    ArrayList<String> clientChoose = new ArrayList<String>();
-    private final int port = 6789;
     
+    private final int port = 6789;
+    SendObject clientChoose;
+ String metodeChoose;
+  String startLoc;
+  String endLoc;
+  Date endDate ;
+  String volume ;
+  String weight;
+
 
     public RunServer() throws IOException {
 	
 
     }
 
-    public ArrayList getClientChoose() throws Exception {
+    public SendObject getClientChoose() throws Exception {
 
 
 	System.out.println("Server listening on port " + port + ".");
 	 
- try {
+try {
 ServerSocket serversocket = new ServerSocket(port);
   System.out.println("Waiting for connections.");
  Socket socket = serversocket.accept();
@@ -36,13 +44,25 @@ ServerSocket serversocket = new ServerSocket(port);
 		    + socket.getInetAddress());
  InputStream is = socket.getInputStream();
  ObjectInputStream ois = new ObjectInputStream(is);
- SendObject sendObject = (SendObject)ois.readObject();
- if (sendObject!=null){System.out.println("modtaget");}
- System.out.println((String)ois.readObject());
+ //SendObject clientChoose = (SendObject)ois.readObject();
+  metodeChoose= (String)ois.readObject();
+  startLoc= (String)ois.readObject();
+  endLoc= (String)ois.readObject();
+  endDate = (Date)ois.readObject();
+  volume = (String)ois.readObject();
+  weight = (String)ois.readObject();
+
+// if (clientChoose!=null){System.out.println("modtaget");}
+ 
  is.close();
  socket.close();
  serversocket.close();
- }catch(Exception e4){System.out.println(e4);}
+}catch(Exception e){System.out.println(e);}
+
+clientChoose = new SendObject(metodeChoose, startLoc, endLoc, endDate, volume, weight);
+ 
+ return clientChoose;
+	
  }
 }
 

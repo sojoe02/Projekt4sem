@@ -7,6 +7,7 @@ package presentation;
 import java.io.*;	    // pakker til socket
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -23,16 +24,27 @@ public class ComToServer {
     public ComToServer() {
     }
 
-    public void connectToServer(ArrayList clientChoose) throws Exception {
+    public void connectToServer(SendObject clientChoose) throws Exception {
 
 
 	try{
  Socket socket = new Socket(ipAddress,port);
  OutputStream os = socket.getOutputStream();
  ObjectOutputStream oos = new ObjectOutputStream(os);
- SendObject sendObject = new SendObject();
- oos.writeObject(sendObject);
- oos.writeObject(new String("another object from the client"));
+// SendObject sendObject = new SendObject();
+// oos.writeObject(clientChoose);
+ String metodeChoose = clientChoose.getMetodeChoose();
+ String startLoc = clientChoose.getstartLoc();
+ String endLoc = clientChoose.getendLoc();
+ Date endDate = clientChoose.getendDate();
+ String volume = clientChoose.getvolume();
+ String weight = clientChoose.weight;
+ oos.writeObject(metodeChoose);
+ oos.writeObject(startLoc);
+ oos.writeObject(endLoc);
+ oos.writeObject(endDate);
+ oos.writeObject(volume);
+ oos.writeObject(weight);
  oos.close();
  os.close();
  socket.close();
@@ -49,7 +61,7 @@ public class ComToServer {
 
 
 
-
+/*
 
 
 	socket = new Socket(ipAddress, port);
@@ -79,3 +91,5 @@ public class ComToServer {
 }
 
 
+ *
+ */

@@ -11,7 +11,11 @@
 
 package presentation;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +28,7 @@ import java.util.logging.Logger;
 public class StartGUI extends javax.swing.JFrame {
 
     private String metodeChoose;
-ArrayList<String> clientChoose = new ArrayList<String>();
+
 
 
     /** Creates new form StartGUI */
@@ -74,7 +78,7 @@ ArrayList<String> clientChoose = new ArrayList<String>();
 
         jendLoc.setText("Amsterdam");
 
-        jendDate.setText("25-04-2010");
+        jendDate.setText("2010-05-04");
 
         jvolume.setText("4000");
 
@@ -96,13 +100,14 @@ ArrayList<String> clientChoose = new ArrayList<String>();
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jweight, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jendDate, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jvolume, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jendLoc, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jstartloc)
-                    .addComponent(LavOrdre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jweight, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jvolume, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jendLoc, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jstartloc)
+                        .addComponent(LavOrdre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jendDate, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
@@ -134,12 +139,13 @@ ArrayList<String> clientChoose = new ArrayList<String>();
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jendDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jvolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)))
-                    .addComponent(jLabel4))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(jendDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jweight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -155,21 +161,28 @@ ArrayList<String> clientChoose = new ArrayList<String>();
 	
 	
 	ComToServer comToServer = new ComToServer();
+
+	    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+	    Date endDate = null;
 	try {
-	    metodeChoose = "1";
+	    endDate = df.parse(jendDate.getText());
+	        } catch (ParseException ex) {
+	    Logger.getLogger(StartGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-	
-	clientChoose.add(metodeChoose);
-	clientChoose.add(jstartloc.getText());
-	clientChoose.add(jendLoc.getText());
-	clientChoose.add(jendDate.getText());
-	clientChoose.add(jvolume.getText());
-	clientChoose.add(jweight.getText());
-
+	    metodeChoose = "placeOrder";
+	    SendObject clientChoose = new SendObject(metodeChoose, jstartloc.getText(),
+		   jendLoc.getText(), endDate, jvolume.getText(),
+		   jweight.getText());
+	try {
 	    comToServer.connectToServer(clientChoose);
 	} catch (Exception ex) {
 	    Logger.getLogger(StartGUI.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	
+
+	    
+	
     }//GEN-LAST:event_LavOrdreActionPerformed
 
     private void jstartlocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jstartlocActionPerformed

@@ -23,11 +23,9 @@ public class Sas {
     //Brugeren som er logget ind
     private Map<String, Ship> ships = new HashMap<String, Ship>();
     private Map<String, User> users = new HashMap<String, User>();
-    private static String url = "jdbc:mysql://" + "localhost" + ":3306/" + "sas";
-    private static String databaseUser = "root";
-    private static String password = "abc";
+ 
     private ArrayList<String> dates = new ArrayList<String>();
-    private ArrayList<String> clientChoose = new ArrayList<String>();
+    //private ArrayList<String> clientChoose = new ArrayList<String>();
     private ArrayList<String> dateList = new ArrayList<String>();
 
     public Sas(User Admin) {
@@ -39,28 +37,27 @@ public class Sas {
 	RunServer runS = new RunServer();
 
 
-	clientChoose = runS.getClientChoose();
+	SendObject clientChoose = runS.getClientChoose();
 
-	try {
-	} catch (IndexOutOfBoundsException e) {
-	    System.out.print(e.getMessage());
+	if(clientChoose.getMetodeChoose() == null ? ("placeOrder") == null : clientChoose.getMetodeChoose().equals("placeOrder"))  {
+	    placeOrder();
 	}
 
 
-	if (clientChoose.get(0).equals("1")) {
-	    dateList = placeOrder();
-
-	}
+	
 
     }
 
     public ArrayList placeOrder() throws SQLException {
 
 
-	ArrayList<String> allshipList = new ArrayList<String>();
+	//ArrayList<String> allshipList = new ArrayList<String>();
 	sas_database database = new sas_database();
 
 	database.connectToSas();
+
+	database.findavailShips(clientChoose.getstartLoc,
+		clientChoose.getendLoc, clientChoose.getvolume, clientChoose.getweight);
 
 	allshipList = database.getAllShip();
 
