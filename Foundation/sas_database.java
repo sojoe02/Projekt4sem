@@ -230,6 +230,39 @@ try {
 
     }
 
+		 try {
+	   statement = con.createStatement();
+	    String insertString = "INSERT INTO SchedullingArrival (date, HarbourName, ShipID)  VALUES" +
+		    " ('2010-06-01', 'Gothenburg Harbour', 4)," +
+		    "('2010-06-05', 'Oslo Harbour', 4), ('2010-06-15', 'Amsterdam Harbour', 4)," +
+		    "('2010-06-17', 'Rotterdam Harbour', 4), ('2010-06-23', 'Poole Harbour', 4)," +
+		    "('2010-07-01', 'Cork Harbour', 4), ('2010-07-28', 'Bosten Harbour', 4)," +
+		    "('2010-08-06', 'New York Harbour', 4), ('2010-08-13', 'Philadelphia', 4)," +
+		    "('2010-08-06', 'NewPort Harbour', 4) ;";
+	    statement.executeUpdate(insertString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception! 12 ");
+	    System.err.println(e.getMessage());
+
+    }
+
+	 try {
+	   statement = con.createStatement();
+	    String insertString = "INSERT INTO SchedullingArrival (date, HarbourName, ShipID)  VALUES" +
+		    " ('2010-05-22', 'Kiel', 5)," +
+		    "('2010-05-24', 'Lubeck', 5), ('2010-05-26', 'Koebenhavn', 5)," +
+		    "('2010-06-01', 'Riga', 5), ('2010-06-06', 'Helsinki', 5)," +
+		    "('2010-06-11', 'Sankt-Peterburg', 5), ('2010-06-14', 'Stockholm', 5)," +
+		    "('2010-06-21', 'Odense', 5);";
+	    statement.executeUpdate(insertString);
+	} catch (SQLException e) {
+	    System.err.println("Got an exception! 12 ");
+	    System.err.println(e.getMessage());
+
+    }
+
+
+
 
 
 	 try {
