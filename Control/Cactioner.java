@@ -44,7 +44,7 @@ public Boolean loginAccess (int userID, String passWord) throws SQLException	{
 
 //------------------------------------------------------------------------------------
 
-    public IACustomer placeOrder(int shipID, String DepartureDate, String ArrivalDate) throws Exception {
+    public IACustomer placeOrder(int shipID, Date DepartureDate, Date ArrivalDate) throws Exception {
 
 	
 	 return  broker.placeOrder(shipID, DepartureDate, ArrivalDate);

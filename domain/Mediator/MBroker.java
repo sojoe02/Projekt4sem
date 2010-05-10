@@ -18,8 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -32,6 +31,7 @@ public class MBroker implements IAContants {
     private ResultSet rs;
     private String sqlStmt;
     private ArrayList<String> ShipDates = new ArrayList<String>();
+    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 
     public MBroker(ESas sas) throws ClassNotFoundException {
 	this.sas = sas;
@@ -62,25 +62,27 @@ public class MBroker implements IAContants {
 
 	    while (rsSchedulling.next()) {
 
-		String ArrivalDate = rsSchedulling.getString("Date_Arrival");
-		String DepartureDate = rsSchedulling.getString("Date_Departure");
-		int ShipID = rsSchedulling.getInt("ShipID");
+		Date arrivalDate = rsSchedulling.getDate("Date_Arrival");
+		Date departureDate = rsSchedulling.getDate("Date_Departure");
+		int shipID = rsSchedulling.getInt("ShipID");
 
 
 		if ((maxContainers - currentContainers) >= containers) {
 
-		    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 
-		    if (df.parse(ArrivalDate).after(df.parse(DepartureDate))) {
-			ShipDates.add(DepartureDate);
-			ShipDates.add(ArrivalDate);
-			ShipDates.add(Integer.toString(ShipID));
+
+
+		    if (arrivalDate.after(departureDate))
+		    {
+
+			ShipDates.add(df.format(departureDate));
+			ShipDates.add(df.format(arrivalDate));
+			ShipDates.add(Integer.toString(shipID));
 		    }
 		}
+		}
 	    }
-	}
-
-
+	
 	connection.getReader().closeResult(rsSchedulling);
 	connection.getReader().closeResult(rsContainerInfo);
 	return ShipDates;
@@ -117,81 +119,45 @@ public class MBroker implements IAContants {
 	return rs;
     }
 
-    public IACustomer placeOrder(int shipID, String DepartureDate, String ArrivalDate) throws SQLException {
-
+    public IACustomer placeOrder(int ShipID, Date DepartureDate, Date ArrivalDate) throws SQLException {
 
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return null;
 	}
+	int userID = sas.getUserID();
+
+	IACustomer iaCustomer = (IACustomer) sas.getCustomer();
+	saveNewOrder(userID, ShipID, DepartureDate, ArrivalDate);
+	mapOrder(userID);
+	return iaCustomer;
+    }
+
+
+    private void saveNewOrder(int UserID, int ShipID, Date DepartureDate, Date ArrivalDate) throws SQLException {
 
 	sqlStmt = "INSERT INTO Ordre (UserID, ShipID, DepartureDate, ArrivalDate) VALUES "
-		+ "(1,1, '2010-05-11', '2010-06-12');";
+		+ "(" + UserID + ", " + ShipID + ", '" + df.format(DepartureDate) +
+		"', '" + df.format(ArrivalDate) + "');";
 	Statement stmt = connection.getWriter().updatequery(sqlStmt);
 	connection.getWriter().closeStatement(stmt);
 
+    }
 
-
-
-
-	sqlStmt = "SELECT * FROM Ship"
-		+ " WHERE ShipID = '" + shipID + "';";
-	rs = connection.getReader().query(sqlStmt);
-
-
-
-
-
-	IACustomer iaShip = mapShip(rs, shipID);
-
-	connection.getReader().closeResult(rs);
-
-
+    private void mapOrder(int UserID) throws SQLException {
 
 	sqlStmt = "SELECT * FROM Ordre "
-		+ "WHERE ShipID = '" + shipID + "';";
+		+ "WHERE ShipID = '" + UserID + "';";
 	rs = connection.getReader().query(sqlStmt);
-
-	mapOrder(rs, shipID);
-	connection.getReader().closeResult(rs);
-	return iaShip;
-    }
-
-    private IACustomer mapShip(ResultSet rs, int shipID) throws SQLException {
-	rs.next();
-
-	String shipName = rs.getString("ShipName");
-
-
-	String shipType = rs.getString("ShipType");
-	String Captain = rs.getString("Captain");
-
-
-
-	int currentContainer = rs.getInt("CurrentContainer");
-	int maxContainer = rs.getInt("MaxContainer");
-
-
-
-	connection.getReader().closeResult(rs);
-
-	sas.createShip(shipID, shipName, shipType, Captain, currentContainer, maxContainer);
-	IACustomer iaShip = (IACustomer) sas.getShip();
-	return iaShip;
-
-
-    }
-
-    private void mapOrder(ResultSet rs, int shipID) throws SQLException {
 
 	while (rs.next()) {
 	    int orderID = rs.getInt("OrderID");
-	    int userID = rs.getInt("UserID");
+	    int shipID = rs.getInt("ShipID");
 	    Date departureDate = rs.getDate("DepartureDate");
 	    Date arrivalDate = rs.getDate("ArrivalDate");
-	    sas.placeOrder(orderID, userID, shipID, departureDate, arrivalDate);
-
+	    sas.mapOrder(orderID, UserID, shipID, departureDate, arrivalDate);
 
 	}
+	connection.getReader().closeResult(rs);
     }
 
     public Boolean loginAccess(int userID, String passWord) throws SQLException {
@@ -207,7 +173,7 @@ public class MBroker implements IAContants {
 	    if (rs.next()) {
 		String company = rs.getString("Company");
 		String adress = rs.getString("Adress");
-		sas.setCustomer(userID, company, adress, passWord);
+		sas.mapCustomer(userID, company, adress, passWord);
 		return true;
 	    }
 	} catch (Exception e) {

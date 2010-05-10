@@ -9,7 +9,7 @@ package Acquaintance;
  *
  * @author Mats l
  */
-public interface IACustomer {
-
+public interface IACustomer  {
+   public String confirm() ;
 
 }

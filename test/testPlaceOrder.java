@@ -37,9 +37,13 @@ ArrayList<String> ShipDates = new ArrayList<String>();
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }
-	 IACustomer iaShip;
-	 iaShip = cactioner.placeOrder(1, "2010-05-02", "2010-05-04");
-	 System.out.println(iaShip.getShipID() + iaShip.getShipName() + iaShip.getOrderInfo());
+	 IACustomer iaCustomer;
+	 Date departureDate = df.parse("2010-05-02");
+	 Date arrivalDate = df.parse("2010-05-04");
+	 System.out.println("sdsdsd " + df.format(departureDate));
+
+	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate);
+	 System.out.println(iaCustomer.confirm());
     }
 
 
