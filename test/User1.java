@@ -4,6 +4,7 @@
  */
 
 package test;
+import domain.Entity.ESas;
 import domain.*;
 /**
  *

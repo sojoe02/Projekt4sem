@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package domain;
+package domain.Entity;
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class EOrder {
     private String[] containerID;
     //Order har en liste over hvilke container, ordren bruger
     private int numberOfContainers;
-    private Map<String, Container> containers = new HashMap<String, Container>();
+    private Map<String, EContainer> containers = new HashMap<String, EContainer>();
 
     public EOrder(int orderID, int userID, int shipID, Date departureDate, Date arrivalDate)	{
 	this.orderID = orderID;
@@ -39,7 +39,7 @@ public class EOrder {
 	return Integer.toString(orderID);
     }
 
-    public void addContainer(Container container) {
+    public void addContainer(EContainer container) {
 	containerID = new String[numberOfContainers];
 
 	for (int index = 0; index < numberOfContainers; index++) {

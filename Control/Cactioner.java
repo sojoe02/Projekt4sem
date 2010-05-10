@@ -6,7 +6,8 @@
 package Control;
 
 
-import Acquaintance.IAShip;
+import Acquaintance.IACustomer;
+import domain.Entity.ESas;
 import domain.Mediator.MBroker;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,16 +20,18 @@ import java.util.Date;
 public class Cactioner {
 
     private MBroker broker;
-    private IAShip iaShip;
+    private IACustomer iaShip;
+    private ESas sas;
 
   public Cactioner() throws ClassNotFoundException	{
-    broker = new MBroker();
+    sas = new ESas();
+    broker = new MBroker(sas);
     }
 //----------------------------------------------------------------------------------
-    public ArrayList findDates(String metodeChoose, String startloc,
+    public ArrayList findShipDates(String metodeChoose, String startloc,
 		   String endLoc, Date endDate, int containers) throws Exception   {
 
-	return broker.findDates(startloc, endLoc, endDate, containers);
+	return broker.findShipDates(startloc, endLoc, endDate, containers);
 
 
 	}
@@ -41,7 +44,7 @@ public Boolean loginAccess (int userID, String passWord) throws SQLException	{
 
 //------------------------------------------------------------------------------------
 
-    public IAShip placeOrder(int shipID, String DepartureDate, String ArrivalDate) throws Exception {
+    public IACustomer placeOrder(int shipID, String DepartureDate, String ArrivalDate) throws Exception {
 
 	
 	 return  broker.placeOrder(shipID, DepartureDate, ArrivalDate);

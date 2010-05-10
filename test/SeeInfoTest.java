@@ -4,6 +4,10 @@
  */
 package test;
 
+import domain.Entity.ESas;
+import domain.Entity.EContainer;
+import domain.Entity.EShip;
+import domain.Entity.EOrder;
 import domain.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,9 +28,9 @@ public class SeeInfoTest {
 	//Lave User
 	ESas SAS = new ESas(dan);
 
-	Container con1 = new Container("A121", dan.getUserID(), "Candy");
-	Container con2 = new Container("B121", dan.getUserID(), "Telephones");
-	Container con3 = new Container("C121", mats.getUserID(), "Cars");
+	EContainer con1 = new EContainer("A121", dan.getUserID(), "Candy");
+	EContainer con2 = new EContainer("B121", dan.getUserID(), "Telephones");
+	EContainer con3 = new EContainer("C121", mats.getUserID(), "Cars");
 	System.out.println("Container er oprettet");
 	//opret container
 

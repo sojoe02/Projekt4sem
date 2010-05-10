@@ -5,7 +5,7 @@
 
 package test;
 
-import Acquaintance.IAShip;
+import Acquaintance.IACustomer;
 import Control.Cactioner;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,11 +33,11 @@ public class testPlaceOrder {
 	DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 ArrayList<String> ShipDates = new ArrayList<String>();
 	Date endDate =df.parse("2010-06-11"); 
-	 ShipDates = cactioner.findDates("1", "Odense", "Amsterdam", endDate, 1001);
+	 ShipDates = cactioner.findShipDates("1", "Odense", "Amsterdam", endDate, 11);
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }
-	 IAShip iaShip;
+	 IACustomer iaShip;
 	 iaShip = cactioner.placeOrder(1, "2010-05-02", "2010-05-04");
 	 System.out.println(iaShip.getShipID() + iaShip.getShipName() + iaShip.getOrderInfo());
     }

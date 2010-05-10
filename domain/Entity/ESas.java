@@ -1,10 +1,13 @@
-package domain;
+package domain.Entity;
 
 import java.util.*;
 
 
 import java.util.ArrayList;
 import Foundation.*;
+import domain.EUser;
+import domain.RunServer;
+import domain.SendObject;
 import java.sql.SQLException;
 
 public class ESas {

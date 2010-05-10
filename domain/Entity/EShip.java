@@ -1,12 +1,12 @@
-package domain;
+package domain.Entity;
 
-import Acquaintance.IAShip;
+import Acquaintance.IACustomer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EShip implements IAShip{
+public class EShip implements IACustomer{
     private ECargo cargo;
     private EOrder order;
     private int shipID;
