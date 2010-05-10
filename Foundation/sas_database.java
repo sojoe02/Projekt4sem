@@ -256,19 +256,23 @@ public class sas_database {
 
 		try {
 	    statement = con.createStatement();
-	    String insertString = "INSERT INTO Harbour VALUES"
-		    + " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
+	    String insertString = "INSERT INTO Harbour VALUES" +
+		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'),  " +
 		    " ('Kiel', '10.118408203125, 54.322931143263474', 'Germany'), " +
-		    " ('Hamburg', 9.9755859375, 53.55336278552809', 'Germany'), " +
+		    " ('Hamburg', '9.9755859375, 53.55336278552809', 'Germany'), "  +
 		    " ('Amsterdam', '4.888916015625, 52.3755991766591', 'Nederland'), " +
 		    " ('Rotterdam', '4.46044921875, 51.92394344554469', 'Nederland'), " +
 		    " ('Dunkirk', '2.373046875, 51.02757633780243', 'France'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'), " +
-		    " ('Odense', '10.39306640625, 55.3915921070334', 'Denmark'); ";
+		    " ('Poole', '-1.9830322265625, 50.719069112580804', 'England'), " +
+		    " ('Porto', '-8.61328125, 41.16211393939692', 'Portugal'), " +
+		    " ('Valencia', '-0.384521484375, 39.470125122358176', 'Spain'), " +
+		    " ('Lisabon', '-9.129638671875, 38.70265930723801', 'portugal'), " +
+		    " ('Gothenborg', '11.97509765625, 57.69240553526455', 'Sweden'), " +
+		    " ('Oslo', '10.733642578125, 59.910975970796784', 'Norway'), " +
+		    " ('Bergen', '5.3173828125, 60.39214792251884', 'Norway'), " +
+		    " ('Edinburgh', '-3.197021484375, 55.95535088453652', 'Scotland'); ";
+		 
+
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception!  ");
@@ -327,7 +331,7 @@ public class sas_database {
 	    String insertString = "INSERT INTO SchedullingArrival (Date_Arrival, HarbourName_Arrival, ShipID)  VALUES"
 		    + " ('2010-05-03', 'Kiel', 1),"
 		    + "('2010-05-05', 'Hamburg', 1), ('2010-05-07', 'Amsterdam', 1),"
-		    + "('2010-05-14', 'London', 1), ('2010-05-22', 'Porto', 1),"
+		    + "('2010-05-16', 'Poole', 1), ('2010-05-23', 'Porto', 1),"
 		    + "('2010-05-30', 'Valencia', 1), ('2010-06-07', 'Marseille', 1);";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
@@ -420,7 +424,7 @@ public class sas_database {
 	    String insertString = "INSERT INTO SchedullingDeparture (Date_Departure, HarbourName_Departure, ShipID)  VALUES"
 		    + " ('2010-05-02', 'Odense', 1),('2010-05-04', 'Kiel', 1),"
 		    + "('2010-05-06', 'Hamburg', 1), ('2010-05-08', 'Amsterdam', 1),"
-		    + "('2010-05-15', 'London', 1), ('2010-05-23', 'Porto', 1),"
+		    + "('2010-05-17', 'Poole', 1), ('2010-05-24', 'Porto', 1),"
 		    + "('2010-05-31', 'Valencia', 1) ;";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
