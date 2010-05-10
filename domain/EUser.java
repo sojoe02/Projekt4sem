@@ -1,22 +1,23 @@
 package domain;
 
+import Acquaintance.IAUser;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class User {
+public class EUser implements IAUser {
 
     private String userID;
     private String Name;
     private String Adress;
-    private Map<String, Order> orders = new HashMap<String, Order>();
+    private Map<String, EOrder> orders = new HashMap<String, EOrder>();
     private int index = 0;
 
     
 
-    public User(String userID, String Name, String Adress) {
+    public EUser(String userID, String Name, String Adress) {
 	this.userID = userID;
 	this.Name = Name;
 	this.Adress = Adress;
@@ -31,7 +32,7 @@ public class User {
 	return userID;
     }
 
-    public Order getOrder(String OrderID){
+    public EOrder getOrder(String OrderID){
 	return orders.get(OrderID);
     }
 
@@ -47,7 +48,7 @@ public class User {
 	{
 	    //System.out.println(itr.next());
 	    //System.out.println(index);
-	    Order order = (Order) itr.next();
+	    EOrder order = (EOrder) itr.next();
 	    //Lav en array eller array liste som så tager alle shipid og returner det
 	    System.out.println(order);
 
@@ -58,7 +59,7 @@ public class User {
 	return shipIDs;
     }
 
-    public void addOrder(Order order){
+    public void addOrder(EOrder order){
 	orders.put(order.getOrderID(), order);
 	System.out.println("Order: " + order.getOrderID() + " er tiføjet");
     }

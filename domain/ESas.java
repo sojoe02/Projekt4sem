@@ -7,31 +7,64 @@ import java.util.ArrayList;
 import Foundation.*;
 import java.sql.SQLException;
 
-public class Sas {
+public class ESas {
 
     private String endLoc;
     private String startLoc;
     private String endDate;
     private String volume;
     private String weight;
-    Ship ship;
-    Order order;
+    EShip ship;
+    EOrder order;
+    ECustomer customer;
     private String totalPrice;
-    private User Admin;
+    private EUser Admin;
     //SAS administrator
-    private User currentUser;
+    private EUser currentUser;
     //Brugeren som er logget ind
-    private Map<String, Ship> ships = new HashMap<String, Ship>();
-    private Map<String, User> users = new HashMap<String, User>();
+    private Map<String, EShip> ships = new HashMap<String, EShip>();
+    private Map<String, EUser> users = new HashMap<String, EUser>();
  
     private ArrayList<String> dates = new ArrayList<String>();
     //private ArrayList<String> clientChoose = new ArrayList<String>();
     private ArrayList<String> dateList = new ArrayList<String>();
 
-    public Sas(User Admin) {
-	this.Admin = Admin;
-	//tilføj en Administrator, dvs. Rederiet
+    public ESas() {
+	customer = new ECustomer();
+	ship = new EShip();
     }
+
+    public void setCustomer(int userID, String company, String adress, String password){
+	customer.setCustomer(userID, company, adress, password);
+    }
+
+    public void CreateShip()	{
+	ship = new EShip();
+    }
+
+    public void createShip(int shipID, String shipName, String shipType,
+	    String Captain, int currentContainer,  int maxContainer )	{
+	ship = new EShip(shipID, shipName, shipType,
+	    Captain, currentContainer, maxContainer);
+	ships.put(Integer.toString(shipID), ship);
+    }
+
+    public void placeOrder (int orderID, int userID, int shipID, Date departureDate, Date arrivalDate)	{
+	 ships.get(Integer.toString(shipID)).placeOrder(orderID, userID, shipID, departureDate, arrivalDate);
+    }
+
+    public EShip getShip()   {
+	return ship;
+    }
+
+    public void getShipNull()  {
+	 ship = null;
+    }
+
+    public void setShipID(int shipID)	{
+	ship.setShipID(shipID);
+    }
+
 
     public void setUp() throws Exception {
 	RunServer runS = new RunServer();
@@ -122,15 +155,15 @@ public class Sas {
 
 	ship.updateShip(volume, weight);
 
-	order = new Order(endLoc, startLoc, date, volume, weight);
+	order = new EOrder(endLoc, startLoc, date, volume, weight);
 
 	String orderID = order.getOrderID();
 
 	return "Confirm";
     }
 
-    public void seeShipInfo(String shipID, User currentUser) {
-	Ship currentShip = findShip(shipID);
+    public void seeShipInfo(String shipID, EUser currentUser) {
+	EShip currentShip = findShip(shipID);
 
 	//Foelgende er for Admin
 	if (currentUser == Admin) {
@@ -167,16 +200,16 @@ public class Sas {
     }
      *
      */
-    public Ship findShip(String ShipID) {
+    public EShip findShip(String ShipID) {
 	return ships.get(ShipID);
     }
 
 //private Ship
-    public void addShip(String shipID, Ship ship) {
+    public void addShip(String shipID, EShip ship) {
 	ships.put(shipID, ship);
     }
 
-    public void addShipTemp(String shipID, Ship Ship) {
+    public void addShipTemp(String shipID, EShip Ship) {
 	ships.put(shipID, Ship);
     }
 }

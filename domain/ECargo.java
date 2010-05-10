@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Cargo {
+public class ECargo {
 
     private Map<String, Container> containers = new HashMap<String, Container>();
-    private int currentvolume;
-    private int currentweight;
+       private int currentContainer;
+    private int maxContainer;
     //Den Bruger som ejer containeren
     private Container currenContainer;
 
-    public Cargo(String currentvolume, String currentweight) {
-	this.currentvolume = Integer.parseInt(currentvolume);
-	this.currentweight = Integer.parseInt(currentweight);
+    public ECargo(int currentContainer, int maxContainer) {
+	this.currentContainer = currentContainer;
+	this.maxContainer = maxContainer;
 
     }
 
