@@ -12,9 +12,7 @@ public class User {
     private String Name;
     private String Adress;
     private Map<String, Order> orders = new HashMap<String, Order>();
-    private int index = 0;
-
-    
+   
 
     public User(String userID, String Name, String Adress) {
 	this.userID = userID;

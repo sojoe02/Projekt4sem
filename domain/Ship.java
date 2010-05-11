@@ -50,7 +50,6 @@ public class Ship {
     }
 
     public String toString() {
-	System.out.println("lort");
 	return "Skibs id:" + shipID + Name + Captain + Totalvolume + Totalweight;
 
     }

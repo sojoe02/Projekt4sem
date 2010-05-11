@@ -30,7 +30,7 @@ public class SeeInfoTest {
 	System.out.println("Container er oprettet");
 	//opret container
 
-	Ship ship1 = new Ship("s1", "1000", "45000");
+	Ship ship1 = new Ship();
 	//opret testskib
 
 
