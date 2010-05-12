@@ -17,11 +17,11 @@ public class placeOrderPanel extends JPanel {
     private CActioner cactioner;
     private specificationPanel specPanel;
     private JButton orderButton, searchButton;
-    private JComboBox shipsCombo;
-    private JScrollPane orderPane, startDatePane, endDatePane;
-    private JTextArea orderText, startDateText, endDateText;
+    
+    private JScrollPane orderPane, startDatePane, endDatePane, shipsPane;
+    private JTextArea orderText, startDateText, endDateText, shipsText;
     private JRadioButton startRadio, endRadio;
-    private JTextField dateChoiceField;
+    private JTextField dateChoiceField, shipChoiceField;
     private String[] info;
     private String startDate, endDate, startDest, endDest, conNum, content;
     private ArrayList<String> shipDates = new ArrayList<String>();
@@ -42,26 +42,37 @@ public class placeOrderPanel extends JPanel {
 
 
 
-	//indsætning af dropdown menu, med skibens navne
-	shipsCombo = new JComboBox();
+
+        //Tekstfelt med alle de mulige skibe
+        shipsText = new JTextArea();
+        shipsText.setEditable(false);
+        shipsText.setText("Hej");
+        shipsPane = new JScrollPane(shipsText);
+
 
 	searchButton = new JButton("Søg efter skib ledige skibe");
 	searchButton.addActionListener(new searchListener());
 
-	JPanel shipChoosingPanel = new JPanel();
-	shipChoosingPanel.setBackground(Color.white);
-	shipChoosingPanel.setLayout(new BoxLayout(shipChoosingPanel, BoxLayout.Y_AXIS));
-
-	shipChoosingPanel.add(new JLabel("Vælg et skib"));
-	shipChoosingPanel.add(shipsCombo);
-	shipChoosingPanel.add(searchButton);
 
 
+        JPanel shipChoosingPanel = new JPanel();
+        shipChoosingPanel.setBackground(Color.white);
+        shipChoosingPanel.setLayout(new BoxLayout(shipChoosingPanel, BoxLayout.Y_AXIS));
+        
+        shipChoosingPanel.add(new JLabel("Vælg et skib"));
+        shipChoosingPanel.add(shipsPane);
+        shipChoosingPanel.add(searchButton);
+        
 
 
-	//rulbart vindue med startdatoer
-	startDateText = new JTextArea();
-	startDateText.setEditable(false);
+
+
+
+/*
+        //rulbart vindue med startdatoer
+        startDateText = new JTextArea();
+        startDateText.setEditable(false);
+
 
 //Temp:
 	startDateText.setText("18-12-2010");
@@ -88,17 +99,32 @@ public class placeOrderPanel extends JPanel {
 	datePanePanel.add(endDatePane);
 
 
+
 	dateChoiceField = new JTextField();
-	JPanel choosingDatePanel = new JPanel();
-	choosingDatePanel.setBackground(Color.white);
-	choosingDatePanel.setLayout(new GridLayout(2, 1));
 
-	choosingDatePanel.add(new JLabel("Indtast den ønskede dato: "));
-	choosingDatePanel.add(dateChoiceField);
 
+
+*/
 
 	//opret Listener til RadioButtons
 	chooseOrder listener = new chooseOrder();
+
+
+        
+        JPanel choosingDatePanel = new JPanel();
+        choosingDatePanel.setBackground(Color.white);
+        choosingDatePanel.setLayout(new GridLayout(2, 1));
+
+        shipChoiceField = new JTextField();
+        dateChoiceField = new JTextField();
+
+        choosingDatePanel.add(new JLabel("Indtast den ønskede dato: "));
+        choosingDatePanel.add(dateChoiceField);
+
+        choosingDatePanel.add(new JLabel("Indtast det ønskede skibsnummer: "));
+        choosingDatePanel.add(shipChoiceField);
+
+
 
 	//oprettelse af de to radiobuttons, og tilføjelse af deres actionlistener
 	startRadio = new JRadioButton("Brug afgangs dato");
@@ -140,50 +166,52 @@ public class placeOrderPanel extends JPanel {
 //          Tilføjning af de forskellige komponenter
 //***************************************************
 
-	add(shipChoosingPanel);
-	add(Box.createRigidArea(new Dimension(0, 10)));
-	add(datePanePanel);
-	add(choosingDatePanel);
-	add(radioPanel);
-	add(orderPane);
-	add(Box.createRigidArea(new Dimension(0, 10)));
-	add(orderButton);
+
+        add(shipChoosingPanel);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+//        add(datePanePanel);
+        add(choosingDatePanel);
+        add(radioPanel);
+        add(orderPane);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(orderButton);
 
     }
 
     private class chooseOrder implements ActionListener {
 
-	public void actionPerformed(ActionEvent event) {
-	    String ship = (String) shipsCombo.getSelectedItem();
-	    //Ship er skibet som bliver valgt i dropdown vinduet
 
-	    Object source = event.getSource();
+        public void actionPerformed(ActionEvent event) {
+            
 
-	    if (source == startRadio) {
-		orderText.setText("Afgangs dato: " + dateChoiceField.getText()
-			+ "\n\nStart destination: " + startDest
-			+ "\nSlut Destination: " + endDest
-			+ "\nAntal container: " + conNum
-			+ "\n\nOrdre indhold: " + content
-			+ "\nSkibs ID: " + ship);
-	    } else {
-		orderText.setText("Ankomst dato: " + dateChoiceField.getText()
-			+ "\n\nStart destination: " + startDest
-			+ "\nSlut Destination: " + endDest
-			+ "\nAntal container: " + conNum
-			+ "\n\nOrdre indhold: " + content
-			+ "\nSkibs ID: " + ship);
-	    }
+            Object source = event.getSource();
+
+            if (source == startRadio) {
+                orderText.setText("Afgangs dato: " + dateChoiceField.getText()
+                        + "\n\nStart destination: " + startDest
+                        + "\nSlut Destination: " + endDest
+                        + "\nAntal container: " + conNum
+                        + "\n\nOrdre indhold: " + content);
+            } else {
+                orderText.setText("Ankomst dato: " + dateChoiceField.getText()
+                        + "\n\nStart destination: " + startDest
+                        + "\nSlut Destination: " + endDest
+                        + "\nAntal container: " + conNum
+                        + "\n\nOrdre indhold: " + content);
+            }
 
 
-	}
+        }
     }
 
-    private class makeOrderListener implements ActionListener {
+    private class makeOrderListener implements ActionListener{
 
-	public void actionPerformed(ActionEvent event) {
 
-	    JOptionPane.showMessageDialog(null, "Ordren er oprettet og registeret");
+        public void actionPerformed(ActionEvent event) {
+            System.out.println(shipChoiceField.getText());
+            System.out.println(dateChoiceField.getText());
+            JOptionPane.showMessageDialog(null, "Ordren er oprettet og registeret");
+   
 	    try {
 		shipDates = cactioner.findShipDates(startDest,  endDest,df.parse(startDate), df.parse(endDate), Integer.parseInt(conNum), content);
 	    } catch (Exception e) {
@@ -214,9 +242,11 @@ public class placeOrderPanel extends JPanel {
 
     private class shipChoiceListener implements ActionListener {
 
-	public void actionPerformed(ActionEvent event) {
-	    String shipName = (String) shipsCombo.getSelectedItem();
-	    //ShipName kan nu bruge stil at hente de forskellige daoter
+
+        public void actionPerformed(ActionEvent event) {
+            System.out.println("skibet er valgt");
+            //ShipName kan nu bruge stil at hente de forskellige daoter
+
 
 
 	}
