@@ -16,7 +16,7 @@ public class placeOrderPanel extends JPanel {
     private JScrollPane orderPane, startDatePane, endDatePane, shipsPane;
     private JTextArea orderText, startDateText, endDateText, shipsText;
     private JRadioButton startRadio, endRadio;
-    private JTextField dateChoiceField;
+    private JTextField dateChoiceField, shipChoiceField;
     private String[] info;
     private String startDate, endDate, startDest, endDest, conNum, content;
 
@@ -35,14 +35,16 @@ public class placeOrderPanel extends JPanel {
 
 
 
-        //indsætning af dropdown menu, med skibens navne
+        //Tekstfelt med alle de mulige skibe
         shipsText = new JTextArea();
-
-        shipsPane = new JScrollPane();
-        shipsPane.add(shipsText);
+        shipsText.setEditable(false);
+        shipsText.setText("Hej");
+        shipsPane = new JScrollPane(shipsText);
 
         searchButton = new JButton("Søg efter skib ledige skibe");
         searchButton.addActionListener(new searchListener());
+
+
 
         JPanel shipChoosingPanel = new JPanel();
         shipChoosingPanel.setBackground(Color.white);
@@ -54,7 +56,7 @@ public class placeOrderPanel extends JPanel {
         
 
 
-
+/*
         //rulbart vindue med startdatoer
         startDateText = new JTextArea();
         startDateText.setEditable(false);
@@ -83,14 +85,20 @@ public class placeOrderPanel extends JPanel {
         datePanePanel.add(startDatePane);
         datePanePanel.add(endDatePane);
 
-
-        dateChoiceField = new JTextField();
+*/
+        
         JPanel choosingDatePanel = new JPanel();
         choosingDatePanel.setBackground(Color.white);
         choosingDatePanel.setLayout(new GridLayout(2, 1));
 
+        shipChoiceField = new JTextField();
+        dateChoiceField = new JTextField();
+
         choosingDatePanel.add(new JLabel("Indtast den ønskede dato: "));
         choosingDatePanel.add(dateChoiceField);
+
+        choosingDatePanel.add(new JLabel("Indtast det ønskede skibsnummer: "));
+        choosingDatePanel.add(shipChoiceField);
 
 
         //opret Listener til RadioButtons
@@ -138,7 +146,7 @@ public class placeOrderPanel extends JPanel {
 
         add(shipChoosingPanel);
         add(Box.createRigidArea(new Dimension(0, 10)));
-        add(datePanePanel);
+//        add(datePanePanel);
         add(choosingDatePanel);
         add(radioPanel);
         add(orderPane);
@@ -174,6 +182,8 @@ public class placeOrderPanel extends JPanel {
 
     private class makeOrderListener implements ActionListener{
         public void actionPerformed(ActionEvent event) {
+            System.out.println(shipChoiceField.getText());
+            System.out.println(dateChoiceField.getText());
             JOptionPane.showMessageDialog(null, "Ordren er oprettet og registeret");
         }
     }

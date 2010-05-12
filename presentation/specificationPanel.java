@@ -40,12 +40,12 @@ public class specificationPanel extends JPanel{
 
 
         //tilføj text felter
-        startDestField = new JTextField();
-        endDestField = new JTextField();
-        startDateField = new JTextField();
-        endDateField = new JTextField();
-        numField = new JTextField();
-        conField = new JTextField();
+        startDestField = new JTextField("Odense");
+        endDestField = new JTextField("Amsterdam");
+        startDateField = new JTextField("2010-06-02");
+        endDateField = new JTextField("2010-07-05");
+        numField = new JTextField("10");
+        conField = new JTextField("Bananer");
 
 
         add(startDestLab);
