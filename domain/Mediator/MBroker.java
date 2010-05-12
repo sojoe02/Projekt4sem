@@ -40,8 +40,8 @@ public class MBroker implements IAContants {
 
     }
 
-    public ArrayList findShipDates(String startLoc, String endLoc,
-	    Date endDate, int containers) throws ParseException, SQLException {
+    public ArrayList findShipDates(String startDest, String endDest, Date startDate,
+	    Date endDate, int containers, String content) throws ParseException, SQLException {
 
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return null;
@@ -53,7 +53,7 @@ public class MBroker implements IAContants {
 
 
 	for (int i = 1; i < currentShips; i++) {
-	    rsSchedulling = getSchedullingInfo(i, startLoc, endLoc);
+	    rsSchedulling = getSchedullingInfo(i, startDest, endDest);
 	    rsContainerInfo = getContainerInfo(i);
 	    rsContainerInfo.next();
 	    rsSchedulling.next();
@@ -74,6 +74,8 @@ public class MBroker implements IAContants {
 
 		    if (arrivalDate.after(departureDate))
 		    {
+		   String dage = df.format(departureDate).substring(6, 7);
+		   System.out.print(dage);
 
 			ShipDates.add(df.format(departureDate));
 			ShipDates.add(df.format(arrivalDate));

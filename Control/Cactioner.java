@@ -17,21 +17,21 @@ import java.util.Date;
  *
  * @author Mats l
  */
-public class Cactioner {
+public class CActioner {
 
     private MBroker broker;
     private IACustomer iaShip;
     private ESas sas;
 
-  public Cactioner() throws ClassNotFoundException	{
+  public CActioner() throws ClassNotFoundException	{
     sas = new ESas();
     broker = new MBroker(sas);
     }
 //----------------------------------------------------------------------------------
-    public ArrayList findShipDates(String metodeChoose, String startloc,
-		   String endLoc, Date endDate, int containers) throws Exception   {
+    public ArrayList findShipDates(String startDest,
+		   String endDest, Date startDate, Date endDate, int containers, String content) throws Exception   {
 
-	return broker.findShipDates(startloc, endLoc, endDate, containers);
+	return broker.findShipDates(startDest, endDest, startDate, endDate, containers, content);
 
 
 	}

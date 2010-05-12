@@ -6,7 +6,7 @@
 package test;
 
 import Acquaintance.IACustomer;
-import Control.Cactioner;
+import Control.CActioner;
 import java.text.DateFormat;
 import java.text.ParseException;
 
@@ -23,7 +23,7 @@ public class testPlaceOrder {
    
 
     public static void main(String[] args) throws ParseException, Exception  {
-	Cactioner cactioner = new Cactioner();
+	CActioner cactioner = new CActioner();
 
 	Boolean access = cactioner.loginAccess(1, "Hest");
 
