@@ -32,8 +32,9 @@ public class testPlaceOrder {
 
 	DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 ArrayList<String> ShipDates = new ArrayList<String>();
-	Date endDate =df.parse("2010-06-11"); 
-	 ShipDates = cactioner.findShipDates("1", "Odense", "Amsterdam", endDate, 11);
+	Date endDate =df.parse("2010-06-11");
+	Date startDate =df.parse("2010-06-02");
+	 ShipDates = cactioner.findShipDates( "Odense", "Amsterdam", startDate, endDate, 11, "Bananer");
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }

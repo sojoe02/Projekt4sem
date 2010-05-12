@@ -31,11 +31,11 @@ public class MBroker implements IAContants {
     private ResultSet rs;
     private String sqlStmt;
     private ArrayList<String> ShipDates = new ArrayList<String>();
-    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+    DateFormat df = new DateFormat("yyyy-mm-dd");
 
     public MBroker(ESas sas) throws ClassNotFoundException {
 	this.sas = sas;
-	sas = new ESas();
+
 	connection = new FConnection(dbUrl, dbDriver);
 
     }
@@ -43,6 +43,7 @@ public class MBroker implements IAContants {
     public ArrayList findShipDates(String startDest, String endDest, Date startDate,
 	    Date endDate, int containers, String content) throws ParseException, SQLException {
 
+	   
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return null;
 	}
@@ -74,8 +75,6 @@ public class MBroker implements IAContants {
 
 		    if (arrivalDate.after(departureDate))
 		    {
-		   String dage = df.format(departureDate).substring(6, 7);
-		   System.out.print(dage);
 
 			ShipDates.add(df.format(departureDate));
 			ShipDates.add(df.format(arrivalDate));
