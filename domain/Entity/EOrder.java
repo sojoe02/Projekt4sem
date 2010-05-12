@@ -11,13 +11,13 @@ public class EOrder {
     private int orderID;
     private int userID;
     private int shipID;
-    private Date departureDate;
-    private Date arrivalDate;
+    private String departureDate;
+    private String arrivalDate;
     private int numberOfContainers;
 
     private Map<String, EContainer> containers = new HashMap<String, EContainer>();
 
-    public EOrder(int orderID, int userID, int shipID, Date departureDate, Date arrivalDate)	{
+    public EOrder(int orderID, int userID, int shipID, String departureDate, String arrivalDate)	{
 	this.orderID = orderID;
 	this.userID = userID;
 	this.shipID = shipID;

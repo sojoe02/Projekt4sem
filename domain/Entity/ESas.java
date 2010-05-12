@@ -1,22 +1,18 @@
 package domain.Entity;
 
 import java.util.*;
-import Foundation.*;
-import java.sql.SQLException;
 
 public class ESas {
 
     private EShip ship;
-    private EOrder order;
     private ECustomer customer;
     private Map<String, EShip> ships = new HashMap<String, EShip>();
-    private Map<String, ECustomer> customers = new HashMap<String, ECustomer>();
 
     public ESas() {
     }
 
-    public void mapCustomer(int userID, String company, String adress, String password) {
-	customer = new ECustomer(userID, company, adress, password);
+    public void mapCustomer(int userID, String company, String adress) {
+	customer = new ECustomer(userID, company, adress);
 
     }
 
@@ -31,7 +27,7 @@ public class ESas {
 	ships.put(Integer.toString(shipID), ship);
     }
 
-    public void mapOrder(int OrderID, int UserID, int ShipID, Date DepartureDate, Date ArrivalDate) {
+    public void mapOrder(int OrderID, int UserID, int ShipID, String DepartureDate, String ArrivalDate) {
 	customer.mapOrder(OrderID, UserID, ShipID, DepartureDate, ArrivalDate);
     }
 
