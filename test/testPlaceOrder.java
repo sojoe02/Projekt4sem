@@ -25,7 +25,7 @@ public class testPlaceOrder {
     public static void main(String[] args) throws ParseException, Exception  {
 	CActioner cactioner = new CActioner();
 
-	Boolean access = cactioner.loginAccess(1, "Hest");
+	Boolean access = cactioner.mapUser(1);
 
 	if (access == true) System.out.println("right login");
 	else {System.out.println("Wrong login");}

@@ -161,7 +161,7 @@ public class MBroker implements IAContants {
 	connection.getReader().closeResult(rs);
     }
 
-    public Boolean loginAccess(int userID, String passWord) throws SQLException {
+    public Boolean mapUser(int userID, String passWord) throws SQLException {
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return false;
 	}
