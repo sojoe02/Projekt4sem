@@ -12,9 +12,9 @@ public class placeOrderPanel extends JPanel {
 
     private specificationPanel specPanel;
     private JButton orderButton, searchButton;
-    private JComboBox shipsCombo;
-    private JScrollPane orderPane, startDatePane, endDatePane;
-    private JTextArea orderText, startDateText, endDateText;
+    
+    private JScrollPane orderPane, startDatePane, endDatePane, shipsPane;
+    private JTextArea orderText, startDateText, endDateText, shipsText;
     private JRadioButton startRadio, endRadio;
     private JTextField dateChoiceField;
     private String[] info;
@@ -36,7 +36,10 @@ public class placeOrderPanel extends JPanel {
 
 
         //indsætning af dropdown menu, med skibens navne
-        shipsCombo = new JComboBox();
+        shipsText = new JTextArea();
+
+        shipsPane = new JScrollPane();
+        shipsPane.add(shipsText);
 
         searchButton = new JButton("Søg efter skib ledige skibe");
         searchButton.addActionListener(new searchListener());
@@ -46,7 +49,7 @@ public class placeOrderPanel extends JPanel {
         shipChoosingPanel.setLayout(new BoxLayout(shipChoosingPanel, BoxLayout.Y_AXIS));
         
         shipChoosingPanel.add(new JLabel("Vælg et skib"));
-        shipChoosingPanel.add(shipsCombo);
+        shipChoosingPanel.add(shipsPane);
         shipChoosingPanel.add(searchButton);
         
 
@@ -147,8 +150,7 @@ public class placeOrderPanel extends JPanel {
     private class chooseOrder implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            String ship = (String) shipsCombo.getSelectedItem();
-            //Ship er skibet som bliver valgt i dropdown vinduet
+            
 
             Object source = event.getSource();
 
@@ -157,15 +159,13 @@ public class placeOrderPanel extends JPanel {
                         + "\n\nStart destination: " + startDest
                         + "\nSlut Destination: " + endDest
                         + "\nAntal container: " + conNum
-                        + "\n\nOrdre indhold: " + content
-                        + "\nSkibs ID: " + ship);
+                        + "\n\nOrdre indhold: " + content);
             } else {
                 orderText.setText("Ankomst dato: " + dateChoiceField.getText()
                         + "\n\nStart destination: " + startDest
                         + "\nSlut Destination: " + endDest
                         + "\nAntal container: " + conNum
-                        + "\n\nOrdre indhold: " + content
-                        + "\nSkibs ID: " + ship);
+                        + "\n\nOrdre indhold: " + content);
             }
 
 
@@ -202,7 +202,7 @@ public class placeOrderPanel extends JPanel {
     private class shipChoiceListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            String shipName = (String) shipsCombo.getSelectedItem();
+            System.out.println("skibet er valgt");
             //ShipName kan nu bruge stil at hente de forskellige daoter
 
 
