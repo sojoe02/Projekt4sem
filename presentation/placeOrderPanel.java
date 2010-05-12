@@ -212,11 +212,7 @@ public class placeOrderPanel extends JPanel {
             System.out.println(dateChoiceField.getText());
             JOptionPane.showMessageDialog(null, "Ordren er oprettet og registeret");
    
-	    try {
-		shipDates = cactioner.findShipDates(startDest,  endDest,df.parse(startDate), df.parse(endDate), Integer.parseInt(conNum), content);
-	    } catch (Exception e) {
-		e.getMessage();
-	    }
+	    
 
 	}
     }
@@ -237,6 +233,14 @@ public class placeOrderPanel extends JPanel {
 	    conNum = info[4];
 	    content = info[5];
 	    System.out.println("søgning er udført");
+
+            try {
+		shipDates = cactioner.findShipDates(startDest,  endDest,df.parse(startDate),
+                        df.parse(endDate), Integer.parseInt(conNum), content);
+	    } catch (Exception e) {
+		e.getMessage();
+	    }
+
 	}
     }
 
