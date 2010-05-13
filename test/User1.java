@@ -4,6 +4,7 @@
  */
 
 package test;
+import domain.Entity.ESas;
 import domain.*;
 /**
  *
@@ -13,8 +14,8 @@ public class User1 {
 
      public static void main (String[] args) throws Exception {
 
-	 User admin = new User("123","Dan","Odense");
-	 Sas sas = new Sas(admin);
+	 EUser admin = new EUser("123","Dan","Odense");
+	 ESas sas = new ESas(admin);
 	 sas.setUp();
 
 

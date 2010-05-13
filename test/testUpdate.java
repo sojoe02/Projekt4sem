@@ -4,18 +4,14 @@
  */
 
 package test;
-import MapTables.sas_database;
-
 
 /**
  *
  * @author Mats l
  */
-public class createdatabase {
-
+public class testUpdate {
      public static void main (String[] args)	{
-	 sas_database database = new sas_database();
-	 database.createDatabase();
-
+	 Update update = new Update();
+	 update.connectToSas();
      }
 }

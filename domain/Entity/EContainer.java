@@ -1,9 +1,9 @@
 
 
-package domain;
+package domain.Entity;
 
 
-public class Container {
+public class EContainer {
 
     private String containerID;
     private String ownerID;
@@ -13,7 +13,7 @@ public class Container {
     private String content;
     //indhold af container
 
-    public Container(String containerID, String ownerID /*, String position*/,
+    public EContainer(String containerID, String ownerID /*, String position*/,
 	    String content){
 	this.containerID = containerID;
 	this.ownerID = ownerID;
