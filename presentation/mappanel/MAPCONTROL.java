@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Soren V. Jorgensen
  */
-public class MapAquaintance {
+public class MAPCONTROL {
 
     private static int gpsNr = 1;
 

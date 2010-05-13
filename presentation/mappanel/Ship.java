@@ -35,14 +35,11 @@ public class Ship {
 	W = 50;
 	//Define the font.
 	font = new Font("SansSerif", Font.BOLD, 10);
-	//control the shipdot size:
-	//if (pHeight < 500) {
-	//    SIZE = pWidth / 60;
-	//} else {
-	SIZE = 12;
-	//}
+	
+	SIZE = 8;
+
 	Random r = new Random();
-	//set shipcolour.
+	//set random shipcolour.
 	c = new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
     }
 
@@ -76,10 +73,10 @@ public class Ship {
 	    if (H < pHeight / 2) {
 		Hs = H + 15;
 	    }
+
 	    //second decimal control as to not spam the screen with text.
-	    //System.out.println(MapAquaintance.longditude.get(gpsNr));
-	    String sLon = Double.toString(MapAquaintance.longditude.get(gpsNr));
-	    String sLat = Double.toString(MapAquaintance.latitude.get(gpsNr));
+	    String sLon = Double.toString(MAPCONTROL.longditude.get(gpsNr));
+	    String sLat = Double.toString(MAPCONTROL.latitude.get(gpsNr));
 
 	    if (sLon.length() > cP && sLat.length() > cP) {
 
@@ -128,42 +125,4 @@ public class Ship {
 	}
 	return false;
     }
-    /*-------------------------------------------------------------------------
-    Methods for determining the position relative to the
-    panelresolution.
-    ------------------------------------------------------------------------*/
-/*
-    public int latitudeToPixels(double latitude, int pHeight) {
-	//Finding the number of decimals of the coordinates.
-	double convlat = latitude + 90;
-	double temp = (int) convlat - convlat;
-	int Nlat = Double.toString(temp).length() - 2;
-	//set max values for latitude.
-	int latmax = 180;
-	//Calculate scaling factors for conversion of latitude to pixels
-	double Scaley = ((double) Nlat * (double) latmax) / ((double) pHeight);
-	//convert latitude into corresponding pixel values
-	if (Scaley == 0) {
-	    return 0;
-	}
-	int pixelheight = (int) ((int) (convlat * Nlat) / (Scaley));
-
-	return pixelheight;
-    }
-
-    //basicly the same method as previous
-    public int longditudeToPixels(double longditude, int pWidth) {
-	double convlong = longditude + 180;
-	double temp = (int) convlong - convlong;
-	int Nlong = Double.toString(temp).length() - 2;
-	int longmax = 360;
-	double Scalex = ((double) Nlong * (double) longmax) / ((double) pWidth);
-	//System.out.println(convlong + " " + Scalex);
-	if (Scalex == 0) {
-	    return 0;
-	}
-	int pixelwidth = (int) ((int) (convlong * Nlong) / (Scalex));
-
-	return pixelwidth;
-    }*/
 }

@@ -10,7 +10,6 @@ package presentation.mappanel;
  */
 public class PixelHandler {
 
-
     public int zoomLatToPixels(double latitude, double scaley, double latmin, double latmax) {
 
 	return (int) -((latitude-latmax) * scaley);

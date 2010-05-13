@@ -7,7 +7,7 @@ package presentation.mappanel.routes;
 
 /**
  *
- * @author japper
+ * @author Soren V Jorgensen
  */
 public class routes {
 
