@@ -16,7 +16,7 @@ public class placeOrderPanel extends JPanel {
 
     private CActioner cactioner;
     private specificationPanel specPanel;
-    private JButton orderButton, searchButton;
+    private JButton orderButton, searchButton, clearButton, useSpecButton;
     
     private JScrollPane orderPane, startDatePane, endDatePane, shipsPane;
     private JTextArea orderText, startDateText, endDateText, shipsText;
@@ -37,31 +37,40 @@ public class placeOrderPanel extends JPanel {
 	setBackground(Color.white);
 	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-	//De mulige skibe og datoer
-	String[] ships = {"Emma Mærsk", "Titanic", "Queen Mary"};
-
-
-
-
         //Tekstfelt med alle de mulige skibe
         shipsText = new JTextArea();
         shipsText.setEditable(false);
-        shipsText.setText("Hej");
+
         shipsPane = new JScrollPane(shipsText);
 
 
 	searchButton = new JButton("Søg efter skib ledige skibe");
 	searchButton.addActionListener(new searchListener());
 
+        clearButton = new JButton("Ryd søgningen");
+        clearButton.addActionListener(new clearListener());
 
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.white);
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        buttonPanel.add(searchButton);
+        buttonPanel.add(clearButton);
+
+        /* oprettelse af et panel som indeholder et vindue til alle skibs info
+         * og en knap til at søge i databasen efter skibe
+         *
+         */
 
         JPanel shipChoosingPanel = new JPanel();
         shipChoosingPanel.setBackground(Color.white);
         shipChoosingPanel.setLayout(new BoxLayout(shipChoosingPanel, BoxLayout.Y_AXIS));
-        
+
         shipChoosingPanel.add(new JLabel("Vælg et skib"));
         shipChoosingPanel.add(shipsPane);
-        shipChoosingPanel.add(searchButton);
+        shipChoosingPanel.add(buttonPanel);
+
+
         
 
 
@@ -104,27 +113,34 @@ public class placeOrderPanel extends JPanel {
 
 
 
-*/
+
 
 	//opret Listener til RadioButtons
 	chooseOrder listener = new chooseOrder();
-
+*/
 
         
         JPanel choosingDatePanel = new JPanel();
         choosingDatePanel.setBackground(Color.white);
         choosingDatePanel.setLayout(new GridLayout(2, 1));
 
-        shipChoiceField = new JTextField();
-        dateChoiceField = new JTextField();
+        shipChoiceField = new JTextField("Eks: 1");
+        dateChoiceField = new JTextField("Eks: 2010-12-04");
 
+
+        //oprettelse af to tekstfelter, hvori man kan indtaste den ønskede dato
+        //og det ønsekde skib
         choosingDatePanel.add(new JLabel("Indtast den ønskede dato: "));
         choosingDatePanel.add(dateChoiceField);
 
         choosingDatePanel.add(new JLabel("Indtast det ønskede skibsnummer: "));
         choosingDatePanel.add(shipChoiceField);
 
+        useSpecButton = new JButton("Brug specfikiationer");
+        useSpecButton.addActionListener(new chooseOrder());
 
+
+/*
 
 	//oprettelse af de to radiobuttons, og tilføjelse af deres actionlistener
 	startRadio = new JRadioButton("Brug afgangs dato");
@@ -144,7 +160,7 @@ public class placeOrderPanel extends JPanel {
 	radioPanel.setBackground(Color.white);
 	radioPanel.add(startRadio);
 	radioPanel.add(endRadio);
-
+*/
 
 	orderText = new JTextArea();    //Et felt hvor man kan skrive
 	orderText.setEditable(false);   //Gør at man ikke kan ændre i teksten
@@ -169,9 +185,10 @@ public class placeOrderPanel extends JPanel {
 
         add(shipChoosingPanel);
         add(Box.createRigidArea(new Dimension(0, 10)));
-//        add(datePanePanel);
+//      add(datePanePanel);
         add(choosingDatePanel);
-        add(radioPanel);
+        add(useSpecButton);
+//        add(radioPanel);
         add(orderPane);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(orderButton);
@@ -179,41 +196,31 @@ public class placeOrderPanel extends JPanel {
     }
 
     private class chooseOrder implements ActionListener {
+        /*
+         * Bruges når man har valgt ALLE ens specifikationer, inkl skib og dato
+         * Man får så vist hvordan ens ordre kommer til at se ud
+         */
 
 
         public void actionPerformed(ActionEvent event) {
-            
-
-            Object source = event.getSource();
-
-            if (source == startRadio) {
                 orderText.setText("Afgangs dato: " + dateChoiceField.getText()
+                        + "\nSkibs ID: " + shipChoiceField.getText()
                         + "\n\nStart destination: " + startDest
                         + "\nSlut Destination: " + endDest
                         + "\nAntal container: " + conNum
                         + "\n\nOrdre indhold: " + content);
-            } else {
-                orderText.setText("Ankomst dato: " + dateChoiceField.getText()
-                        + "\n\nStart destination: " + startDest
-                        + "\nSlut Destination: " + endDest
-                        + "\nAntal container: " + conNum
-                        + "\n\nOrdre indhold: " + content);
-            }
-
-
         }
     }
 
     private class makeOrderListener implements ActionListener{
-
-
+        /*
+         * Laver et popup vindue, som siger at ordren er bekræftet og lavet
+         */
         public void actionPerformed(ActionEvent event) {
             System.out.println(shipChoiceField.getText());
             System.out.println(dateChoiceField.getText());
             JOptionPane.showMessageDialog(null, "Ordren er oprettet og registeret");
    
-	    
-
 	}
     }
 
@@ -224,6 +231,9 @@ public class placeOrderPanel extends JPanel {
 	    /* getInfo sender et String array:
 	     * {startdato, slutdato, startdestination, slutdestination, antal container
 	     * , indhold af ordre}
+             *
+             * Der bliver derefter søgt i databasen for at finde de matchende
+             * datoer og skibe, og man får det så vist
 	     */
 	    info = specPanel.getInfo(); //Strign array
 	    startDate = info[0];
@@ -241,18 +251,37 @@ public class placeOrderPanel extends JPanel {
 		e.getMessage();
 	    }
 
+            shipDates.add("2010-12-04");
+            shipDates.add("2011-11-01");
+            shipDates.add("1");
+
+            shipDates.add("2020-12-30");
+            shipDates.add("2059-05-10");
+            shipDates.add("2");
+
+
+
+            //3 parametre som skal angive, start, slut og skibs ids position i
+            //arraylisten shipDates
+            int a = 0,b = 1,c = 2;
+
+            //skriver alle de søgte datoer og skibs id ud
+            while(c<shipDates.size()){
+                shipsText.append("Start datoer: " + shipDates.get(a));
+                a=a+3;
+                shipsText.append("\nSlut datoer: " + shipDates.get(b));
+                b=b+3;
+                shipsText.append("\nSkibs ID: " + shipDates.get(c)+ "\n\n");
+                c=c+3;
+            }
 	}
     }
 
-    private class shipChoiceListener implements ActionListener {
-
-
-        public void actionPerformed(ActionEvent event) {
-            System.out.println("skibet er valgt");
-            //ShipName kan nu bruge stil at hente de forskellige daoter
-
-
-
-	}
+    private class clearListener implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+            //sletter alle datoer og skibs ider fra søgnings vindue
+            shipDates.clear(); //sletter alt fra shipDates
+            shipsText.setText("");  //lave et tomt vindue
+        }
     }
 }

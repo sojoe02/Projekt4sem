@@ -33,8 +33,8 @@ public class specificationPanel extends JPanel{
 
         startDestLab = new JLabel("Start destination: ");
         endDestLab = new JLabel("Slut destination: ");
-        startDateLab = new JLabel("Afgangs dato: ");
-        endDateLab = new JLabel("Ankomst dato: ");
+        startDateLab = new JLabel("Afgangs dato (yyyy-mm-dd) : ");
+        endDateLab = new JLabel("Ankomst dato (yyyy-mm-dd) : ");
         numLab = new JLabel("Antal container: ");
         conLab = new JLabel("Container indhold: ");
 
