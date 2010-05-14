@@ -127,7 +127,6 @@ public class sas_database {
 		    + "ShipName VARCHAR(50) NOT NULL,"
 		    + "ShipType VARCHAR(50) NOT NULL,"
 		    + "Captain VARCHAR(70) NOT NULL,"
-		    + "CurrentContainer INT(6) NOT NULL,"
 		    + "MaxContainer INT(6) NOT NULL,"
 		    + "PRIMARY KEY (ShipID));";
 	    statement.executeUpdate(dropString);
@@ -202,11 +201,13 @@ public class sas_database {
 	try {
 	    statement = con.createStatement();
 	    String dropString = "CREATE TABLE Schedulling ("
+		    + "sID INT(5) AUTO_INCREMENT,"
 		    + " A_or_D VARCHAR(40),"
-		    + "Date DATE,"
+		    + "Date Date,"
 		    + "Harbour VARCHAR(30),"
 		    + "ShipID INT(4), " +
-		    "CurrentContainer INT(6));";
+		    "CurrentContainer INT(6)," +
+		    "PRIMARY KEY(sID));";
 	    statement.executeUpdate(dropString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception!1212 ");
@@ -318,14 +319,11 @@ public class sas_database {
 	try {
 	    statement = con.createStatement();
 	    String insertString = "INSERT INTO Ship VALUES"
-		    + " (1, 'Neil Young', 'ALM Transport', 'Dan Nguyen', 0, 1000),"
-		    + "(2, 'Melua', 'ALM Transport', 'Mats Larsen', 0, 1250),"
-		    + "(3, 'Madonna', 'ALM Transport', 'Soeren Joergensen', 0, "
-		    + "700),"
-		    + "(4, 'Jim Morrison', 'ALM Transport', 'Stefan Larsen', 0, "
-		    + "1500),"
-		    + "(5, 'Kurt Cubain', 'ALM Transport', 'Marius Vestergaard',"
-		    + " 0, 250)";
+		    + " (1, 'Neil Young', 'ALM Transport', 'Dan Nguyen', 25),"
+		    + "(2, 'Melua', 'ALM Transport', 'Mats Larsen', 25),"
+		    + "(3, 'Madonna', 'ALM Transport', 'Soeren Joergensen', 28),"
+		    + "(4, 'Jim Morrison', 'ALM Transport', 'Stefan Larsen', 29),"
+		    + "(5, 'Kurt Cubain', 'ALM Transport', 'Marius Vestergaard', 28)";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception!  ");

@@ -33,16 +33,16 @@ public class testPlaceOrder {
 ArrayList<String> ShipDates = new ArrayList<String>();
 	Date endDate =df.parse("2010-06-11");
 	Date startDate =df.parse("2010-06-02");
-	 ShipDates = cactioner.findShipDates( "Odense", "Amsterdam", startDate, endDate, 11, "Bananer");
+	 ShipDates = cactioner.findShipDates( "Odense", "Amsterdam", startDate, endDate, 4, "Bananer");
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }
 	 IACustomer iaCustomer;
 	 String departureDate = "2010-05-02";
-	 String arrivalDate = "2010-05-04";
+	 String arrivalDate = "2010-05-07";
 	 
 
-	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate, 11, "Bananer");
+	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate, 4, "Bananer");
 	 System.out.println(iaCustomer.confirm());
     }
 

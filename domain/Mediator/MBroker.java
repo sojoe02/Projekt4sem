@@ -162,7 +162,7 @@ public class MBroker implements IAContants {
 	connection.getReader().closeResult(rs);
 	return currentShips;
     }
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
 
     private ResultSet getDeparture(int currentShip, String startLoc, String endLoc) throws SQLException {
 
@@ -188,7 +188,6 @@ public class MBroker implements IAContants {
     }
 
 //-----------------------------------------------------------------------------
-
     private ResultSet getContainerInfo(int currentShip) throws SQLException {
 	sqlStmt = "SELECT * FROM Ship "
 		+ "WHERE ShipID = " + currentShip + ";";
@@ -196,6 +195,7 @@ public class MBroker implements IAContants {
 	return rs;
     }
 //-----------------------------------------------------------------------------
+
     private int getCurrentContainer(int currentShip, String departureDate,
 	    String arrivalDate) throws SQLException {
 
@@ -222,6 +222,7 @@ public class MBroker implements IAContants {
 	// Den valgte placeOrder gammes i databasen.
 	int orderID = saveNewOrder(userID, ShipID, DepartureDate, ArrivalDate);
 	saveNewContainer(orderID, ShipID, containers, content);
+	updateChange(ShipID, DepartureDate, ArrivalDate, containers);
 	// Kundes order mappes.
 	mapOrder(userID);
 	return iaCustomer;
@@ -230,6 +231,7 @@ public class MBroker implements IAContants {
     /*
      * Stmt sendes til writer i foundation, som opdaterer tabellen.
      */
+
     private int saveNewOrder(int UserID, int ShipID, String DepartureDate,
 	    String ArrivalDate) throws SQLException {
 
@@ -240,43 +242,85 @@ public class MBroker implements IAContants {
 	connection.getWriter().closeStatement(stmt);
 
 	sqlStmt = "SELECT * FROM  Ordre "
-		+ "WHERE ShipID = " + ShipID +
-		" AND DepartureDate = '" + DepartureDate + "';";
+		+ "WHERE ShipID = " + ShipID
+		+ " AND DepartureDate = '" + DepartureDate + "';";
 	rs = connection.getReader().query(sqlStmt);
 	rs.next();
 
 	return rs.getInt("OrderID");
     }
 //----------------------------------------------------------------------------
-    private void saveNewContainer (int orderID, int shipID, int containers, String content) throws SQLException    {
 
-	sqlStmt = "SELECT * FROM Container " +
-		"WHERE Status = 'Empty' AND ShipID = " + shipID + ";";
-		rs = connection.getReader().query(sqlStmt);
-	
+    private void saveNewContainer(int orderID, int shipID, int containers, String content) throws SQLException {
+
+	sqlStmt = "SELECT * FROM Container "
+		+ "WHERE Status = 'Empty' AND ShipID = " + shipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+
 	for (int i = 0; i < containers; i++) {
 	    rs.next();
 	    int containerID = rs.getInt("ContainerID");
 	    System.out.println(Integer.toString(containerID));
 
-	sqlStmt = "UPDATE Container SET Content = '" + content + "', Status = 'Full' WHERE ContainerID = " + containerID + ";";
-		//"AND Content = '" + content + "' " +
-		//"WHERE ContainerID = " + containerID + ";";
-	Statement stmt = connection.getWriter().updatequery(sqlStmt);
-	connection.getWriter().closeStatement(stmt);
- 
-    }
+	    sqlStmt = "UPDATE Container SET Content = '" + content + "', " +
+		    "OrderID = '" + orderID + "', "
+		    + "Status = 'Full' WHERE ContainerID = " + containerID + ";";
+
+	    Statement stmt = connection.getWriter().updatequery(sqlStmt);
+	    connection.getWriter().closeStatement(stmt);
+
 	}
+	connection.getReader().closeResult(rs);
+    }
+
+    private void updateChange(int ShipID, String DepartureDate, String ArrivalDate, int containers) throws SQLException {
+
+	System.out.println("dato: " + DepartureDate + " " + ArrivalDate);
+
+
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "WHERE ShipID = " + ShipID
+		+ " AND Date = '" + DepartureDate + "';";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int sIDD = rs.getInt("sID");
+	System.out.println("sIDD = " + Integer.toString(sIDD));
+	connection.getReader().closeResult(rs);
+
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "WHERE ShipID = " + ShipID
+		+ " AND Date = '" + ArrivalDate + "';";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int sIDA = rs.getInt("sID");
+	System.out.println("sIDA = " + Integer.toString(sIDA));
+
+	for (int i = sIDD; i < sIDA + 1; i++) {
+
+	    sqlStmt = "SELECT * FROM Schedulling "
+		    + "WHERE sID = " + i + ";";
+	    rs = connection.getReader().query(sqlStmt);
+	    rs.next();
+	    int currentContainer = rs.getInt("CurrentContainer");
+	    connection.getReader().closeResult(rs);
+
+	    sqlStmt = "UPDATE Schedulling "
+		    + "SET CurrentContainer = " + (currentContainer + containers)
+		    + " WHERE sID = " + i + ";";
+	    connection.getWriter().updatequery(sqlStmt);
+
+	}
+    }
 
 //----------------------------------------------------------------------------
     /*
      * Stmt sendes til Reader, som henter de order, som er oprettet med det 
-     bestemte userID. Dermed oprettes orderne en af gangen.
+    bestemte userID. Dermed oprettes orderne en af gangen.
      */
     private void mapOrder(int UserID) throws SQLException {
 
 	sqlStmt = "SELECT * FROM Ordre "
-		+ "WHERE ShipID = '" + UserID + "';";
+		+ "WHERE UserID = '" + UserID + "';";
 	rs = connection.getReader().query(sqlStmt);
 
 	while (rs.next()) {
@@ -284,9 +328,58 @@ public class MBroker implements IAContants {
 	    int shipID = rs.getInt("ShipID");
 	    String departureDate = rs.getString("DepartureDate");
 	    String arrivalDate = rs.getString("ArrivalDate");
-	    sas.mapOrder(orderID, UserID, shipID, departureDate, arrivalDate);
+
+	    mapShip(shipID);
+
+	    sas.mapOrder(orderID, sas.getShip(shipID), departureDate, arrivalDate);
+
+	    
+	    mapContainer(shipID, orderID);
+
+
+
+
 	}
 	connection.getReader().closeResult(rs);
+    }
+
+    private void mapShip(int shipID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM ship "
+		+ "WHERE ShipID = " + shipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+
+	sas.mapShip(shipID, rs.getString("ShipName"), rs.getString("ShipType"),
+		rs.getString("Captain"), rs.getInt("MaxContainer"));
+
+    }
+/*
+
+    private void mapCargo(int ShipID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM ship "
+		+ "WHERE ShipID = " + ShipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int maxContainer = rs.getInt("MaxContainer");
+	sas.mapCargo(sas.getShip(ShipID), maxContainer);
+    }
+
+ * 
+ */
+
+    private void mapContainer(int ShipID, int OrderID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM Container "
+		+ "WHERE ShipID = " + ShipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	while (rs.next())   {
+	    sas.mapContainer(sas.getShip(ShipID), rs.getInt("ContainerID"), rs.getString("Content"),
+		  OrderID, rs.getString("Status"));
+
+	}
+
     }
 }
 

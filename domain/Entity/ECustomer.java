@@ -29,9 +29,20 @@ public class ECustomer implements IACustomer {
 
     }
 
-    public void mapOrder(int OrderID, int UserID, int ShipID, String DepartureDate, String ArrivalDate) {
-	order = new EOrder(OrderID, UserID, ShipID, DepartureDate, ArrivalDate);
+    public void mapOrder(int OrderID, EShip Ship, String DepartureDate, String ArrivalDate) {
+	order = new EOrder(OrderID, getUserID(), Ship, DepartureDate, ArrivalDate);
 	orders.put(Integer.toString(OrderID), order);
+    }
+
+    public void mapContainerToOrder(int OrderID, int ContainerID, EContainer Container)	{
+
+	order = orders.get(Integer.toString(OrderID));
+	System.out.println(order.getOrderID());
+	order.mapContainerToOrder(ContainerID, Container);
+    }
+
+    public EOrder getOrder(int OrderID) {
+	return orders.get(Integer.toString(OrderID));
     }
 
     public int getUserID() {
