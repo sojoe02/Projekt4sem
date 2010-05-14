@@ -6,7 +6,9 @@ public class ESas {
 
     private EShip ship;
     private ECustomer customer;
+    private EHarbour harbour;
     private Map<String, EShip> ships = new HashMap<String, EShip>();
+    private Map<String, EHarbour> harbours = new HashMap<String, EHarbour>();
 
     public ESas() {
     }
@@ -27,8 +29,14 @@ public class ESas {
 	ships.put(Integer.toString(shipID), ship);
     }
 
-    public void mapOrder(int OrderID, EShip Ship, String DepartureDate, String ArrivalDate) {
-	customer.mapOrder(OrderID, Ship, DepartureDate, ArrivalDate);
+    public void mapOrder(int OrderID, EShip Ship, String startCoordinate, String startNationally,
+	    String endCoordinate, String endNationally, String startDest, String endDest, String DepartureDate, String ArrivalDate) {
+	harbour = new EHarbour(startDest, startCoordinate, startNationally);
+	harbours.put(startDest, harbour);
+	harbour = new EHarbour(endDest, endCoordinate, endNationally);
+	harbours.put(endDest, harbour);
+
+	customer.mapOrder(OrderID, Ship, harbours.get(startDest), harbours.get(endDest), DepartureDate, ArrivalDate);
     }
 
 

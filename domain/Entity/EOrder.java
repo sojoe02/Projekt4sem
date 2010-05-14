@@ -11,6 +11,8 @@ public class EOrder {
     private EShip ship;
     private int orderID;
     private int userID;
+    private EHarbour startHarbour;
+    private EHarbour endHarbour;
 
     private String departureDate;
     private String arrivalDate;
@@ -18,10 +20,12 @@ public class EOrder {
 
     private Map<String, EContainer> containers = new HashMap<String, EContainer>();
 
-    public EOrder(int orderID, int userID, EShip Ship, String departureDate, String arrivalDate)	{
+    public EOrder(int orderID, int userID, EShip Ship, EHarbour startHarbour, EHarbour endHarbour, String departureDate, String arrivalDate)	{
 	this.orderID = orderID;
 	this.userID = userID;
 	this.ship = Ship;
+	this.startHarbour =startHarbour;
+	this.endHarbour = endHarbour;
 	this.departureDate = departureDate;
 	this.arrivalDate = arrivalDate;
     }
@@ -34,7 +38,5 @@ public class EOrder {
 	return Integer.toString(orderID);
     }
 
-    public String toString() {
-	return Integer.toString(orderID) + Integer.toString(userID) + Integer.toString(ship.getShipID());
-    }
+
 }

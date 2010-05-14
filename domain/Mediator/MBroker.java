@@ -208,7 +208,7 @@ public class MBroker implements IAContants {
     }
 //-----------------------------------------------------------------------------
 
-    public IACustomer placeOrder(int ShipID, String DepartureDate,
+    public IACustomer placeOrder(int ShipID, String startDest, String endDest, String DepartureDate,
 	    String ArrivalDate, int containers, String content) throws SQLException {
 
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
@@ -224,7 +224,7 @@ public class MBroker implements IAContants {
 	saveNewContainer(orderID, ShipID, containers, content);
 	updateChange(ShipID, DepartureDate, ArrivalDate, containers);
 	// Kundes order mappes.
-	mapOrder(userID);
+	mapOrder(userID, startDest, endDest);
 	return iaCustomer;
     }
 //-----------------------------------------------------------------------------
@@ -317,10 +317,10 @@ public class MBroker implements IAContants {
      * Stmt sendes til Reader, som henter de order, som er oprettet med det 
     bestemte userID. Dermed oprettes orderne en af gangen.
      */
-    private void mapOrder(int UserID) throws SQLException {
+    private void mapOrder(int UserID, String startDest, String endDest) throws SQLException {
 
 	sqlStmt = "SELECT * FROM Ordre "
-		+ "WHERE UserID = '" + UserID + "';";
+		+ "WHERE UserID = " + UserID + ";";
 	rs = connection.getReader().query(sqlStmt);
 
 	while (rs.next()) {
@@ -331,7 +331,22 @@ public class MBroker implements IAContants {
 
 	    mapShip(shipID);
 
-	    sas.mapOrder(orderID, sas.getShip(shipID), departureDate, arrivalDate);
+
+	    	sqlStmt = "SELECT * FROM Harbour "
+		+ "WHERE Harbour = '" + startDest + "';";
+	ResultSet rsstartDest = connection.getReader().query(sqlStmt);
+
+		    	sqlStmt = "SELECT * FROM Harbour "
+		+ "WHERE Harbour = '" + endDest + "';";
+	ResultSet rsendDest = connection.getReader().query(sqlStmt);
+
+	    rsstartDest.next();
+	    rsendDest.next();
+
+	    sas.mapOrder(orderID, sas.getShip(shipID), startDest, endDest, 
+		    rsstartDest.getString("Coordinate"), rsstartDest.getString("Nationally"),
+		     rsendDest.getString("Coordinate"), rsendDest.getString("Nationally"),
+		     departureDate, arrivalDate);
 
 	    
 	    mapContainer(shipID, orderID);

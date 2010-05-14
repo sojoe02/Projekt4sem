@@ -42,7 +42,7 @@ ArrayList<String> ShipDates = new ArrayList<String>();
 	 String arrivalDate = "2010-05-07";
 	 
 
-	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate, 4, "Bananer");
+	 iaCustomer = cactioner.placeOrder(1, "Odense", "Amsterdam", departureDate, arrivalDate, 4, "Bananer");
 	 System.out.println(iaCustomer.confirm());
     }
 

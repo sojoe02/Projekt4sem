@@ -57,10 +57,10 @@ public class CActioner {
      * interface med ECustomer.
      */
 
-    public IACustomer placeOrder(int shipID, String DepartureDate, 
+    public IACustomer placeOrder(int shipID, String startDest, String endDest, String DepartureDate,
 	    String ArrivalDate, int containers, String content) throws Exception {
 
-	return broker.placeOrder(shipID, DepartureDate, ArrivalDate, containers
+	return broker.placeOrder(shipID, startDest, endDest, DepartureDate, ArrivalDate, containers
 		, content);
 
     }
