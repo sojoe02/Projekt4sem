@@ -5,34 +5,26 @@ package domain.Entity;
 
 public class EContainer {
 
-    private String containerID;
-    private String ownerID;
+    private int containerID;
+   
     //brugeren som bruger containeren til at fragte noget
-    private String Position;
+   
     //position på skibet
     private String content;
+    private String status;
     //indhold af container
 
-    public EContainer(String containerID, String ownerID /*, String position*/,
-	    String content){
+    public EContainer(int containerID, String Content, String Status){
 	this.containerID = containerID;
-	this.ownerID = ownerID;
-	this.content = content;
+	this.content = Content;
+	this.status = Status;
 	//this.Position = position;
 	//instantiere container
     }
 
-    public String toString(){
-	String str = "ContainerID: " + containerID + "\n" + ownerID +"\nContent:"
-	+ content +"\n--------------------";
-	return str;
-    }
-
-    public String getOwnerID(){
-	return ownerID;
-    }
-
-    public String getContainerID(){
+ 
+    
+    public int getContainerID(){
 	 return containerID;
     }
 

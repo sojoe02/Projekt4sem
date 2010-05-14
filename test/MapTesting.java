@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package presentation.mappanel.routes;
+package test;
 
 /**
  *
- * @author Soren V Jorgensen
+ * @author Zagadka
  */
-public class routes {
+public class MapTesting {
 
 }

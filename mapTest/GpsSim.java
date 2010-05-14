@@ -4,7 +4,7 @@
  */
 package mapTest;
 
-import presentation.mappanel.MapAquaintance;
+import presentation.mappanel.MAPCONTROL;
 
 import java.util.Random;
 
@@ -25,10 +25,10 @@ public class GpsSim implements Runnable {
 	while (running) {
 	    lat = (double) generator.nextInt(180) - 90;
 	    lon = (double) generator.nextInt(360) - 180;
-	    MapAquaintance.coordinateHandling(lat, lon, 0);
+	    MAPCONTROL.coordinateHandling(lat, lon, 0);
 	    lat = (double) generator.nextInt(180) - 90;
 	    lon = (double) generator.nextInt(360) - 180;
-	    MapAquaintance.coordinateHandling(lat, lon, 1);
+	    MAPCONTROL.coordinateHandling(lat, lon, 1);
 	    try {
 		Thread.sleep(100);
 	    } catch (InterruptedException ex) {

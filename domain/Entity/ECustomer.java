@@ -20,18 +20,29 @@ public class ECustomer implements IACustomer {
     int userID;
     String company;
     String adress;
-    String password;
 
-    public ECustomer(int userID, String company, String adress, String password) {
+
+    public ECustomer(int userID, String company, String adress) {
 	this.userID = userID;
 	this.company = company;
 	this.adress = adress;
-	this.password = password;
+
     }
 
-    public void mapOrder(int OrderID, int UserID, int ShipID, Date DepartureDate, Date ArrivalDate) {
-	order = new EOrder(OrderID, UserID, ShipID, DepartureDate, ArrivalDate);
+    public void mapOrder(int OrderID, EShip Ship, String DepartureDate, String ArrivalDate) {
+	order = new EOrder(OrderID, getUserID(), Ship, DepartureDate, ArrivalDate);
 	orders.put(Integer.toString(OrderID), order);
+    }
+
+    public void mapContainerToOrder(int OrderID, int ContainerID, EContainer Container)	{
+
+	order = orders.get(Integer.toString(OrderID));
+	System.out.println(order.getOrderID());
+	order.mapContainerToOrder(ContainerID, Container);
+    }
+
+    public EOrder getOrder(int OrderID) {
+	return orders.get(Integer.toString(OrderID));
     }
 
     public int getUserID() {
@@ -39,7 +50,7 @@ public class ECustomer implements IACustomer {
     }
 
     public String confirm() {
-	return  userID + " " + company + " " + adress + " " + password + " ";
+	return  userID + " " + company + " " + adress +  " ";
     }
 }
 

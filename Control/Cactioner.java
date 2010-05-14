@@ -1,10 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Control;
-
 
 import Acquaintance.IACustomer;
 import domain.Entity.ESas;
@@ -13,42 +7,61 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
- * @author Mats l
- */
 public class CActioner {
 
     private MBroker broker;
     private IACustomer iaShip;
     private ESas sas;
 
-  public CActioner() throws ClassNotFoundException	{
-    sas = new ESas();
-    broker = new MBroker(sas);
+    public CActioner() throws ClassNotFoundException {
+	sas = new ESas();
+	broker = new MBroker(sas);
     }
-//----------------------------------------------------------------------------------
-    public ArrayList findShipDates(String startDest,
-		   String endDest, Date startDate, Date endDate, int containers, String content) throws Exception   {
+
+//------------------------------------------------------------------------------------
+/*
+ * User bliver hentet fra databasen og oprettet i Entity pakken,
+ * hvis user altså er oprettet.
+ * User skal kende userID, som er en unik nummer.
+ */
+    public String mapUser(int userID) throws SQLException {
+
+	/*
+	 * Kaldes i mediator pakken. Hvis User eksister retuneres sandt eller
+	 * sendes falsk.
+	 */
+	String access = broker.mapUser(userID);
+	return access;
+    }
+
+//-----------------------------------------------------------------------------
+    // findShipDates henter de skibsdatoer der overholder kundens ønsker.
+
+    public ArrayList findShipDates(String startDest, String endDest,
+	    Date startDate, Date endDate, int containers, String content)
+	    throws Exception {
+
+	/* Resultet af de fundne datoer sendes op til kunden i
+	 presentationsalget i form af et arraylist.
+	 */
 
 	return broker.findShipDates(startDest, endDest, startDate, endDate, containers, content);
-
-
-	}
-//------------------------------------------------------------------------------------
-public Boolean loginAccess (int userID, String passWord) throws SQLException	{
-
-	   Boolean access= broker.loginAccess(userID, passWord);
-	 return access;
-}
-
+    }
 //------------------------------------------------------------------------------------
 
-    public IACustomer placeOrder(int shipID, Date DepartureDate, Date ArrivalDate) throws Exception {
+    /*
+     * Her har kunden valgt et skib, derfor skal orderen oprettes og gemmes i
+     * databasen. Der mappes order, ship, container klasser, da oplysninger
+     * skal udvekles i presentaionslaget. Derfor returneres en reference af 
+     * IACustomer, som findes i interface klassen. Denne klasse kan har et 
+     * interface med ECustomer.
+     */
 
-	
-	 return  broker.placeOrder(shipID, DepartureDate, ArrivalDate);
+    public IACustomer placeOrder(int shipID, String DepartureDate, 
+	    String ArrivalDate, int containers, String content) throws Exception {
+
+	return broker.placeOrder(shipID, DepartureDate, ArrivalDate, containers
+		, content);
 
     }
-
 }

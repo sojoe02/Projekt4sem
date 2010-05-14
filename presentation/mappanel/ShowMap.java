@@ -28,6 +28,7 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
     private Map<Integer, Thread> GpsThread =
 	    new HashMap<Integer, Thread>(50);
     private int gpsThreadIndex = 1;
+    private Harbours harbour = new Harbours();
     //Thread to start the aninmator, pause and running booleans
     private BufferedImage img = null;
     private PixelHandler pxhandler = new PixelHandler();
@@ -51,11 +52,23 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 	    addShip();
 	}
 
+
+	//---------------------------------------------------------------------
+	//Initial zoom setting when loading up the map.
+	longmin = -180;
+	longmax = 180;
+	latmin = -90;
+	latmax = 90;
+	try {
+	    img = ImageIO.read(new File("Images/mainmap.jpg"));
+	} catch (IOException ex) {
+	    System.out.println("Images/mainmap.jpg not found");
+	}
+
     }
 
     private void mapRender(Graphics2D g) {
-	//Setting up scaling optimizations:
-
+	//Setting up scaling optimizations.
 	g.setComposite(AlphaComposite.Src);
 	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 		RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -73,23 +86,28 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 	Graphics2D g2 = (Graphics2D) g.create();
 	mapRender(g2);
 	shipRender(g2);
+	harbour.drawHarbours(g2, longmin, longmax, latmin, latmax,
+		getWidth(), getHeight());
     }
 
     private void shipRender(Graphics g) {
-
 	int f = 1;
-
-
-
 	double sx = pxhandler.scalingX(longmin, longmax, getWidth());
 	double sy = pxhandler.scalingY(latmin, latmax, getHeight());
 
+/*
+	int pxx = pxhandler.zoomLongToPixels(10.3930664, sx, longmin, longmax);
+	int pyy = pxhandler.zoomLatToPixels(55.39159210, sy, latmin, latmax);
+
+	harbour.drawHarbour(g, pxx, pyy, Zoomflag, "Odense");
+*/
 	for (Ship ship : ships) {
-	    //int py = ship.latitudeToPixels(MapAquaintance.getLatitude(f), getHeight());
-	    //int px = ship.longditudeToPixels(MapAquaintance.getLongditude(f), getWidth());
-	    int px = pxhandler.zoomLongToPixels(MapAquaintance.getLongditude(f), sx, longmin, longmax);
-	    int py = pxhandler.zoomLatToPixels(MapAquaintance.getLatitude(f), sy, latmin, latmax);
-	    //System.out.println(px + "and" + py);
+
+	    int px = pxhandler.zoomLongToPixels(MAPCONTROL.getLongditude(f),
+		    sx, longmin, longmax);
+	    int py = pxhandler.zoomLatToPixels(MAPCONTROL.getLatitude(f),
+		    sy, latmin, latmax);
+
 	    ship.move(py, px);
 	    ship.draw(g);
 	    ship.drawCoor(g, getWidth(), getHeight());
@@ -99,9 +117,9 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 
     public void addShip() {
 	//get current gpsMap.
-	int gpsNr = MapAquaintance.getGpsMap();
+	int gpsNr = MAPCONTROL.getGpsMap();
 	//add a Gps.
-	MapAquaintance.addGps();
+	MAPCONTROL.addGps();
 	//Make the gps thread add it to a hashmap and start it.
 	Thread thread = new Thread(new GpsSim2(gpsNr));
 	GpsThread.put(gpsThreadIndex, thread);
@@ -139,12 +157,18 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 	    }
 	}
 
+	//Testing the pixeHandler (not really used!)
 	if (e.getButton() == 2) {
 	    System.out.println(pxhandler.pixelToLat(getHeight(), e.getY()));
 	    System.out.println(pxhandler.pixelToLong(getWidth(), e.getX()));
-	    
+
 	}
 
+	/*--------------------------------------------------------------------
+	 * Controlling the zoom using rightclick, since the map is still not too
+	 * precise it can be a bit tricky, but it works decently.
+	 * Zoomflag boolean used to determine wether the map is zoomed in ot not.
+	 */
 	if (e.getButton() == 3) {
 	    if (Zoomflag == true) {
 		longmin = -180;
@@ -166,8 +190,6 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 		longmax = zoom.getLongLat()[1];
 		latmin = zoom.getLongLat()[2];
 		latmax = zoom.getLongLat()[3];
-
-		//System.out.println(longmin + "and" + longmax + "and"+ latmin+"and" + latmax);
 
 		Zoomflag = true;
 	    }
@@ -194,37 +216,5 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 
     public void mouseMoved(MouseEvent me) {
     }
-
-    /*private static void createAndShowGUI() {
-    JFrame f = new JFrame("Animated Graphics");
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setSize(200, 200);
-    ShowMap mp = new ShowMap();
-    f.add(mp);
-
-    f.setVisible(true);
-    }
-
-    public static void main(String args[]) {
-
-    for (int i = 0; i < 80; i++) {
-    new Thread(new GpsSim2(i)).start();
-    }
-
-    Runnable doCreateAndShowGUI = new Runnable() {
-
-    public void run() {
-
-    createAndShowGUI();
-    }
-    };
-    SwingUtilities.invokeLater(doCreateAndShowGUI);
-    try {
-    Thread.sleep(2);
-    } catch (Exception e) {
-    }
-    }
-     * 
-     */
 }
 

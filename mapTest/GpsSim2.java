@@ -4,7 +4,7 @@
  */
 package mapTest;
 
-import presentation.mappanel.MapAquaintance;
+import presentation.mappanel.MAPCONTROL;
 import java.util.Random;
 
 /**
@@ -77,7 +77,7 @@ public class GpsSim2 implements Runnable {
 	    lon = 179;
 	}
 
-	MapAquaintance.coordinateHandling(lat, lon,gpsindex);
+	MAPCONTROL.coordinateHandling(lat, lon,gpsindex);
 	//System.out.println(lat + "and" + lon);
     }
 }

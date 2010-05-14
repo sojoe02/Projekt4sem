@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package presentation.mappanel.routes;
+package domain.Entity;
 
 /**
  *
- * @author Soren V Jorgensen
+ * @author Mats l
  */
-public class routes {
+public class EHarbour {
 
 }

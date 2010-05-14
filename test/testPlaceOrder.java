@@ -25,24 +25,24 @@ public class testPlaceOrder {
     public static void main(String[] args) throws ParseException, Exception  {
 	CActioner cactioner = new CActioner();
 
-	Boolean access = cactioner.loginAccess(1, "Hest");
-
-	if (access == true) System.out.println("right login");
-	else {System.out.println("Wrong login");}
+	String acces = cactioner.mapUser(1);
+	System.out.println(acces);
+	
 
 	DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 ArrayList<String> ShipDates = new ArrayList<String>();
-	Date endDate =df.parse("2010-06-11"); 
-	 ShipDates = cactioner.findShipDates("1", "Odense", "Amsterdam", endDate, 11);
+	Date endDate =df.parse("2010-06-11");
+	Date startDate =df.parse("2010-06-02");
+	 ShipDates = cactioner.findShipDates( "Odense", "Amsterdam", startDate, endDate, 4, "Bananer");
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }
 	 IACustomer iaCustomer;
-	 Date departureDate = df.parse("2010-05-02");
-	 Date arrivalDate = df.parse("2010-05-04");
-	 System.out.println("sdsdsd " + df.format(departureDate));
+	 String departureDate = "2010-05-02";
+	 String arrivalDate = "2010-05-07";
+	 
 
-	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate);
+	 iaCustomer = cactioner.placeOrder(1, departureDate, arrivalDate, 4, "Bananer");
 	 System.out.println(iaCustomer.confirm());
     }
 

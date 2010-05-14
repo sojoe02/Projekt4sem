@@ -19,75 +19,138 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 /**
  *
  * @author Mats l
  */
+// Der implementeres interface IAContants, som indeholder konstanter
 public class MBroker implements IAContants {
 
     private ESas sas;
     private FConnection connection;
     private ResultSet rs;
     private String sqlStmt;
-    private ArrayList<String> ShipDates = new ArrayList<String>();
-    DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+    private ArrayList<String> shipDates = new ArrayList<String>();
+    private DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 
+    /*
+     * MBroker har samme reference til ESas som CActioner.
+     * Der oprettes forbindelse til foundation.
+     */
     public MBroker(ESas sas) throws ClassNotFoundException {
 	this.sas = sas;
-	sas = new ESas();
 	connection = new FConnection(dbUrl, dbDriver);
-
     }
 
-    public ArrayList findShipDates(String startDest, String endDest, Date startDate,
-	    Date endDate, int containers, String content) throws ParseException, SQLException {
+    /*
+     * Her opretteres User i Entity pakken, hvis User altså eksistere i databasen
+     * Her oprettes connection til databasen, hvis det fejler meddelles det.
+     */
+    public String mapUser(int userID) throws SQLException {
+	String databaseStatus = "Can't get connection to the database";
+	String acces_ok = "You have now acces to the system";
+	String acces_fail = "You are not registered in our database";
+
+	/*
+	 * Opretter forbindelse til databasen, med de valgte konto, brugernavn
+	 * og kodeord.
+	 */
+
+	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
+	    return databaseStatus;
+	}
+
+	/*
+	 * Dette stmt henter User fra databasen med det angivet userID.
+	 */
+
+	sqlStmt = "SELECT * FROM Customer "
+		+ "WHERE UserID =" + userID;
+	rs = connection.getReader().query(sqlStmt);
+
+	/*
+	 * Tester om userID er registeret i databasen.
+	 * Hvis User er registeret mappes user i entity.
+	 * Her mappes kun User, og ikke kundes order.
+	 */
+	try {
+	    if (rs.next()) {
+		String company = rs.getString("Company");
+		String adress = rs.getString("Adress");
+		sas.mapCustomer(userID, company, adress);
+		return acces_ok;
+	    }
+	} catch (Exception e) {
+	    e.getMessage();
+	}
+	return acces_fail;
+    }
+//-----------------------------------------------------------------------------
+
+    public ArrayList findShipDates(String startDest, String endDest,
+	    Date startDate, Date endDate, int containers, String content)
+	    throws ParseException, SQLException {
+
+	ResultSet rsDeparture = null;
+	ResultSet rsArrival = null;
+	ResultSet rsContainerInfo = null;
+
 
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return null;
 	}
+
+	// Her findes der ud af hvor mange skibe der ekistere ved redderiet.
 	int currentShips = countShips();
-
-	ResultSet rsSchedulling = null;
-	ResultSet rsContainerInfo = null;
-
-
+// Dette loop kører alle skibene igennem.
 	for (int i = 1; i < currentShips; i++) {
-	    rsSchedulling = getSchedullingInfo(i, startDest, endDest);
+	    /*
+	     * Henter datoer, som gemmes i ResultSet, derfor kan et skib have
+	     * flere datoer.
+	     */
+
+	    rsDeparture = getDeparture(i, startDest, endDest);
+	    rsArrival = getArrival(i, startDest, endDest);
+	    // Henter container information om maxcontainer og brugte container.
 	    rsContainerInfo = getContainerInfo(i);
+
 	    rsContainerInfo.next();
-	    rsSchedulling.next();
-	    int currentContainers = rsContainerInfo.getInt("CurrentContainer");
+	    // Det maxsimale container der kan være på skibet.
 	    int maxContainers = rsContainerInfo.getInt("MaxContainer");
 
-	    while (rsSchedulling.next()) {
+	    // Dette loop slutter når der ikke er flere dato muligheder.
+	    while (rsDeparture.next()) {
+		while (rsArrival.next()) {
 
-		Date arrivalDate = rsSchedulling.getDate("Date_Arrival");
-		Date departureDate = rsSchedulling.getDate("Date_Departure");
-		int shipID = rsSchedulling.getInt("ShipID");
+		    String arrivalDate = rsArrival.getString("Date");
+		    String departureDate = rsDeparture.getString("Date");
+		    int shipID = rsDeparture.getInt("ShipID");
+		    int currentContainer = getCurrentContainer(i, departureDate, arrivalDate);
+		    // Tester om container er tilrådighed.
+		    if ((maxContainers - currentContainer) >= containers) {
 
+			// Tester om afgangsdatoen er før ankomstdatoen.
+			if (df.parse(arrivalDate).after(df.parse(departureDate))) {
 
-		if ((maxContainers - currentContainers) >= containers) {
-
-
-
-
-		    if (arrivalDate.after(departureDate))
-		    {
-		   String dage = df.format(departureDate).substring(6, 7);
-		   System.out.print(dage);
-
-			ShipDates.add(df.format(departureDate));
-			ShipDates.add(df.format(arrivalDate));
-			ShipDates.add(Integer.toString(shipID));
+			    /*
+			     * Indsættes i et arrayList, hvor række 1 er afgang
+			     * 2 række er ankomst. 3 række er shipID.
+			     * Hvis der er en mulighed mere, foresætter det ved
+			     * række 4, 5 og 6.
+			     */
+			    shipDates.add(departureDate);
+			    shipDates.add(arrivalDate);
+			    shipDates.add(Integer.toString(shipID));
+			}
 		    }
 		}
-		}
 	    }
-	
-	connection.getReader().closeResult(rsSchedulling);
+	}
+// resultset lukkes ned.
+	connection.getReader().closeResult(rsDeparture);
+	connection.getReader().closeResult(rsArrival);
 	connection.getReader().closeResult(rsContainerInfo);
-	return ShipDates;
+	return shipDates;
     }
 
     private int countShips() throws SQLException {
@@ -98,90 +161,224 @@ public class MBroker implements IAContants {
 	int currentShips = rs.getInt("rowcount");
 	connection.getReader().closeResult(rs);
 	return currentShips;
+    }
+    //---------------------------------------------------------------------------
 
+    private ResultSet getDeparture(int currentShip, String startLoc, String endLoc) throws SQLException {
+
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "WHERE Harbour = '" + startLoc + "' "
+		+ "AND A_or_D = 'Departure'"
+		+ "AND ShipID = " + currentShip + ";";
+	rs = connection.getReader().query(sqlStmt);
+
+	connection.getReader().query(sqlStmt);
+
+	return rs;
     }
 
-    private ResultSet getSchedullingInfo(int currentShip, String startLoc, String endLoc) throws SQLException {
-
-
-	sqlStmt = "SELECT * FROM SchedullingArrival, SchedullingDeparture "
-		+ "WHERE HarbourName_Departure = '" + startLoc + "' "
-		+ "AND HarbourName_Arrival ='" + endLoc + "' "
-		+ "AND SchedullingArrival.ShipID = " + currentShip
-		+ " AND SchedullingDeparture.ShipID = " + currentShip + ";";
+    private ResultSet getArrival(int currentShip, String startLoc, String endLoc) throws SQLException {
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "Where Harbour ='" + endLoc + "' "
+		+ "AND A_or_D = 'Arrival'"
+		+ "AND ShipID = " + currentShip + ";";
 	rs = connection.getReader().query(sqlStmt);
 
 	return rs;
     }
 
+//-----------------------------------------------------------------------------
     private ResultSet getContainerInfo(int currentShip) throws SQLException {
 	sqlStmt = "SELECT * FROM Ship "
 		+ "WHERE ShipID = " + currentShip + ";";
 	rs = connection.getReader().query(sqlStmt);
 	return rs;
     }
+//-----------------------------------------------------------------------------
 
-    public IACustomer placeOrder(int ShipID, Date DepartureDate, Date ArrivalDate) throws SQLException {
+    private int getCurrentContainer(int currentShip, String departureDate,
+	    String arrivalDate) throws SQLException {
+
+	sqlStmt = "SELECT max(CurrentContainer) FROM Schedulling "
+		+ "WHERE ShipID = " + currentShip + ";";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+
+	return rs.getInt(1);
+    }
+//-----------------------------------------------------------------------------
+
+    public IACustomer placeOrder(int ShipID, String DepartureDate,
+	    String ArrivalDate, int containers, String content) throws SQLException {
 
 	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
 	    return null;
 	}
+	// Henter userID ,da der kun er user som har adgang af gangen.
 	int userID = sas.getUserID();
 
+	// referencen af iaCustomer, får referencen til den aktive user.
 	IACustomer iaCustomer = (IACustomer) sas.getCustomer();
-	saveNewOrder(userID, ShipID, DepartureDate, ArrivalDate);
+	// Den valgte placeOrder gammes i databasen.
+	int orderID = saveNewOrder(userID, ShipID, DepartureDate, ArrivalDate);
+	saveNewContainer(orderID, ShipID, containers, content);
+	updateChange(ShipID, DepartureDate, ArrivalDate, containers);
+	// Kundes order mappes.
 	mapOrder(userID);
 	return iaCustomer;
     }
+//-----------------------------------------------------------------------------
+    /*
+     * Stmt sendes til writer i foundation, som opdaterer tabellen.
+     */
 
-
-    private void saveNewOrder(int UserID, int ShipID, Date DepartureDate, Date ArrivalDate) throws SQLException {
+    private int saveNewOrder(int UserID, int ShipID, String DepartureDate,
+	    String ArrivalDate) throws SQLException {
 
 	sqlStmt = "INSERT INTO Ordre (UserID, ShipID, DepartureDate, ArrivalDate) VALUES "
-		+ "(" + UserID + ", " + ShipID + ", '" + df.format(DepartureDate) +
-		"', '" + df.format(ArrivalDate) + "');";
+		+ "(" + UserID + ", " + ShipID + ", '" + DepartureDate
+		+ "', '" + ArrivalDate + "');";
 	Statement stmt = connection.getWriter().updatequery(sqlStmt);
 	connection.getWriter().closeStatement(stmt);
 
+	sqlStmt = "SELECT * FROM  Ordre "
+		+ "WHERE ShipID = " + ShipID
+		+ " AND DepartureDate = '" + DepartureDate + "';";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+
+	return rs.getInt("OrderID");
     }
+//----------------------------------------------------------------------------
 
-    private void mapOrder(int UserID) throws SQLException {
+    private void saveNewContainer(int orderID, int shipID, int containers, String content) throws SQLException {
 
-	sqlStmt = "SELECT * FROM Ordre "
-		+ "WHERE ShipID = '" + UserID + "';";
+	sqlStmt = "SELECT * FROM Container "
+		+ "WHERE Status = 'Empty' AND ShipID = " + shipID + ";";
 	rs = connection.getReader().query(sqlStmt);
 
-	while (rs.next()) {
-	    int orderID = rs.getInt("OrderID");
-	    int shipID = rs.getInt("ShipID");
-	    Date departureDate = rs.getDate("DepartureDate");
-	    Date arrivalDate = rs.getDate("ArrivalDate");
-	    sas.mapOrder(orderID, UserID, shipID, departureDate, arrivalDate);
+	for (int i = 0; i < containers; i++) {
+	    rs.next();
+	    int containerID = rs.getInt("ContainerID");
+	    System.out.println(Integer.toString(containerID));
+
+	    sqlStmt = "UPDATE Container SET Content = '" + content + "', " +
+		    "OrderID = '" + orderID + "', "
+		    + "Status = 'Full' WHERE ContainerID = " + containerID + ";";
+
+	    Statement stmt = connection.getWriter().updatequery(sqlStmt);
+	    connection.getWriter().closeStatement(stmt);
 
 	}
 	connection.getReader().closeResult(rs);
     }
 
-    public Boolean loginAccess(int userID, String passWord) throws SQLException {
-	if (connection.connect(dbUrl, dbPassword, dataBaseUser) == false) {
-	    return false;
+    private void updateChange(int ShipID, String DepartureDate, String ArrivalDate, int containers) throws SQLException {
+
+	System.out.println("dato: " + DepartureDate + " " + ArrivalDate);
+
+
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "WHERE ShipID = " + ShipID
+		+ " AND Date = '" + DepartureDate + "';";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int sIDD = rs.getInt("sID");
+	System.out.println("sIDD = " + Integer.toString(sIDD));
+	connection.getReader().closeResult(rs);
+
+	sqlStmt = "SELECT * FROM Schedulling "
+		+ "WHERE ShipID = " + ShipID
+		+ " AND Date = '" + ArrivalDate + "';";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int sIDA = rs.getInt("sID");
+	System.out.println("sIDA = " + Integer.toString(sIDA));
+
+	for (int i = sIDD; i < sIDA + 1; i++) {
+
+	    sqlStmt = "SELECT * FROM Schedulling "
+		    + "WHERE sID = " + i + ";";
+	    rs = connection.getReader().query(sqlStmt);
+	    rs.next();
+	    int currentContainer = rs.getInt("CurrentContainer");
+	    connection.getReader().closeResult(rs);
+
+	    sqlStmt = "UPDATE Schedulling "
+		    + "SET CurrentContainer = " + (currentContainer + containers)
+		    + " WHERE sID = " + i + ";";
+	    connection.getWriter().updatequery(sqlStmt);
+
 	}
-	sqlStmt = "SELECT * FROM Customer "
-		+ "WHERE UserID =" + userID
-		+ " AND Password = '" + passWord + "';";
+    }
+
+//----------------------------------------------------------------------------
+    /*
+     * Stmt sendes til Reader, som henter de order, som er oprettet med det 
+    bestemte userID. Dermed oprettes orderne en af gangen.
+     */
+    private void mapOrder(int UserID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM Ordre "
+		+ "WHERE UserID = '" + UserID + "';";
 	rs = connection.getReader().query(sqlStmt);
 
-	try {
-	    if (rs.next()) {
-		String company = rs.getString("Company");
-		String adress = rs.getString("Adress");
-		sas.mapCustomer(userID, company, adress, passWord);
-		return true;
-	    }
-	} catch (Exception e) {
-	    System.out.println("wrong login " + e.toString());
+	while (rs.next()) {
+	    int orderID = rs.getInt("OrderID");
+	    int shipID = rs.getInt("ShipID");
+	    String departureDate = rs.getString("DepartureDate");
+	    String arrivalDate = rs.getString("ArrivalDate");
+
+	    mapShip(shipID);
+
+	    sas.mapOrder(orderID, sas.getShip(shipID), departureDate, arrivalDate);
+
+	    
+	    mapContainer(shipID, orderID);
+
+
+
+
 	}
-	return false;
+	connection.getReader().closeResult(rs);
+    }
+
+    private void mapShip(int shipID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM ship "
+		+ "WHERE ShipID = " + shipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+
+	sas.mapShip(shipID, rs.getString("ShipName"), rs.getString("ShipType"),
+		rs.getString("Captain"), rs.getInt("MaxContainer"));
+
+    }
+/*
+
+    private void mapCargo(int ShipID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM ship "
+		+ "WHERE ShipID = " + ShipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	rs.next();
+	int maxContainer = rs.getInt("MaxContainer");
+	sas.mapCargo(sas.getShip(ShipID), maxContainer);
+    }
+
+ * 
+ */
+
+    private void mapContainer(int ShipID, int OrderID) throws SQLException {
+
+	sqlStmt = "SELECT * FROM Container "
+		+ "WHERE ShipID = " + ShipID + ";";
+	rs = connection.getReader().query(sqlStmt);
+	while (rs.next())   {
+	    sas.mapContainer(sas.getShip(ShipID), rs.getInt("ContainerID"), rs.getString("Content"),
+		  OrderID, rs.getString("Status"));
+
+	}
 
     }
 }

@@ -1,22 +1,18 @@
 package domain.Entity;
 
 import java.util.*;
-import Foundation.*;
-import java.sql.SQLException;
 
 public class ESas {
 
     private EShip ship;
-    private EOrder order;
     private ECustomer customer;
     private Map<String, EShip> ships = new HashMap<String, EShip>();
-    private Map<String, ECustomer> customers = new HashMap<String, ECustomer>();
 
     public ESas() {
     }
 
-    public void mapCustomer(int userID, String company, String adress, String password) {
-	customer = new ECustomer(userID, company, adress, password);
+    public void mapCustomer(int userID, String company, String adress) {
+	customer = new ECustomer(userID, company, adress);
 
     }
 
@@ -25,16 +21,30 @@ public class ESas {
     }
 
     public void mapShip(int shipID, String shipName, String shipType,
-	    String Captain, int currentContainer, int maxContainer) {
+	    String Captain, int maxContainer) {
 	ship = new EShip(shipID, shipName, shipType,
-		Captain, currentContainer, maxContainer);
+		Captain, maxContainer);
 	ships.put(Integer.toString(shipID), ship);
     }
 
-    public void mapOrder(int OrderID, int UserID, int ShipID, Date DepartureDate, Date ArrivalDate) {
-	customer.mapOrder(OrderID, UserID, ShipID, DepartureDate, ArrivalDate);
+    public void mapOrder(int OrderID, EShip Ship, String DepartureDate, String ArrivalDate) {
+	customer.mapOrder(OrderID, Ship, DepartureDate, ArrivalDate);
     }
 
+
+    public void mapContainer (EShip Ship, int ContainerID, String Content,
+		    int OrderID, String Status)	{
+	this.ship = Ship;
+	ship.mapContainer(ContainerID, Content, Status);
+	customer.mapContainerToOrder(OrderID, ContainerID, ship.getContainer(ContainerID));
+    }
+    
+    public EShip getShip(int ShipID)	{
+	return ships.get(Integer.toString(ShipID));
+    }
+    public EOrder   getOrder (int OrderID)  {
+	return customer.getOrder(OrderID);
+    }
     public ECustomer getCustomer() {
 	return customer;
     }
