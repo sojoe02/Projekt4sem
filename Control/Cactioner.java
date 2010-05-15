@@ -38,14 +38,14 @@ public class CActioner {
     // findShipDates henter de skibsdatoer der overholder kundens ønsker.
 
     public ArrayList findShipDates(String startDest, String endDest,
-	    Date startDate, Date endDate, int containers, String content)
+	    Date startDate, Date endDate, int containers)
 	    throws Exception {
 
 	/* Resultet af de fundne datoer sendes op til kunden i
 	 presentationsalget i form af et arraylist.
 	 */
 
-	return broker.findShipDates(startDest, endDest, startDate, endDate, containers, content);
+	return broker.findShipDates(startDest, endDest, startDate, endDate, containers);
     }
 //------------------------------------------------------------------------------------
 
@@ -57,11 +57,11 @@ public class CActioner {
      * interface med ECustomer.
      */
 
-    public IACustomer placeOrder(int shipID, String startDest, String endDest, String DepartureDate,
+    public IACustomer placeOrder(int shipID, String startDest, String endDest,
+	    String DepartureDate,
 	    String ArrivalDate, int containers, String content) throws Exception {
 
-	return broker.placeOrder(shipID, startDest, endDest, DepartureDate, ArrivalDate, containers
-		, content);
+	return broker.placeOrder(shipID, startDest, endDest, DepartureDate, ArrivalDate, containers, content);
 
     }
 }

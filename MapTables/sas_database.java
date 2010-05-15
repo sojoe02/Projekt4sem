@@ -519,15 +519,15 @@ public class sas_database {
 		    + "('Departure', '2010-07-14', 'Hamburg', 3, 0), ('Arrival', '2010-07-27', 'Amsterdam', 3, 0), "
 		    + "('Departure', '2010-07-28', 'Amsterdam', 3, 0), ('Arrival', '2010-08-06', 'Poole', 3, 0),"
 		    + "('Departure', '2010-08-07', 'Poole', 3, 0), ('Arrival', '2010-08-14', 'Cork', 3, 0), "
-		    + "('Departure', '2010-08-15', 'Cork', 3, 0), ('Arrival', '2010-06-22', 'Bosten', 3, 0), "
-		    + "('Departure', '2010-06-23', 'Bosten', 3, 0), ('Arrival', '2010-06-26', 'New York', 3, 0), "
-		    + "('Departure', '2010-06-27', 'New York', 3, 0), ('Arrival', '2010-06-28', 'New Orleams', 3, 0),"
-		    + "('Departure', '2010-06-29', 'New Orleams', 3, 0), ('Arrival', '2010-07-16', 'Lisabon', 3, 0),"
-		    + "('Departure', '2010-07-17', 'Lisabon', 3, 0), ('Arrival', '2010-07-29', 'Poole', 3, 0),"
-		    + "('Departure', '2010-07-30', 'Poole', 3, 0), ('Arrival', '2010-08-11', 'Dunkirk', 3, 0),"
-		    + "('Departure', '2010-08-12', 'Dunkirk', 3, 0), ('Arrival', '2010-08-18', 'Amsterdam', 3, 0),"
-		    + "('Departure', '2010-08-19', 'Amsterdam', 3, 0), ('Arrival', '2010-08-23', 'Hamburg', 3, 0),"
-		    + "('Departure', '2010-08-24', 'Hamburg', 3, 0), ('Arrival', '2010-08-25', 'Odense', 3, 0); ";
+		    + "('Departure', '2010-08-15', 'Cork', 3, 0), ('Arrival', '2010-08-22', 'Bosten', 3, 0), "
+		    + "('Departure', '2010-08-23', 'Bosten', 3, 0), ('Arrival', '2010-08-26', 'New York', 3, 0), "
+		    + "('Departure', '2010-08-27', 'New York', 3, 0), ('Arrival', '2010-09-28', 'New Orleams', 3, 0),"
+		    + "('Departure', '2010-09-29', 'New Orleams', 3, 0), ('Arrival', '2010-10-16', 'Lisabon', 3, 0),"
+		    + "('Departure', '2010-10-17', 'Lisabon', 3, 0), ('Arrival', '2010-10-29', 'Poole', 3, 0),"
+		    + "('Departure', '2010-10-30', 'Poole', 3, 0), ('Arrival', '2010-11-11', 'Dunkirk', 3, 0),"
+		    + "('Departure', '2010-11-12', 'Dunkirk', 3, 0), ('Arrival', '2010-11-18', 'Amsterdam', 3, 0),"
+		    + "('Departure', '2010-11-19', 'Amsterdam', 3, 0), ('Arrival', '2010-11-23', 'Hamburg', 3, 0),"
+		    + "('Departure', '2010-11-24', 'Hamburg', 3, 0), ('Arrival', '2010-11-25', 'Odense', 3, 0); ";
 	    statement.executeUpdate(insertString);
 	} catch (SQLException e) {
 	    System.err.println("Got an exception! 12 ");
@@ -582,58 +582,7 @@ public class sas_database {
 
     }
 
-    public ArrayList findAvrilShip(String startLoc, String endLoc, String volume, String weight) {
-
-	ArrayList<String> dateChoose = new ArrayList<String>();
-	String afgang = null;
-	String ankomst = null;
-	try {
-	    ResultSet resultSet;
-	    String sqlStmt = "SELECT * FROM Schedulling WHERE HarbourName= '" + startLoc + "' "
-		    + "AND ";
-	    Statement stmt;
-	    stmt = con.createStatement();
-
-	    resultSet = stmt.executeQuery(sqlStmt);
-
-	    while (resultSet.next()) {
-		afgang = resultSet.getString("Date");
-
-	    }
-	    System.out.println("sdsdsdsdsdsd " + afgang);
-	} catch (SQLException e) {
-	    System.out.println("Error executing sql statement");
-	}
-
-	try {
-	    String sqlStmt = "SELECT * FROM 2_ship WHERE Destination= '" + endLoc + "'";
-	    Statement stmt;
-	    stmt = con.createStatement();
-	    ResultSet resultSet;
-	    resultSet = stmt.executeQuery(sqlStmt);
-
-	    while (resultSet.next()) {
-		ankomst = resultSet.getString("Dato");
-
-	    }
-	    System.out.println("sdsdsdsdsdsd " + ankomst);
-	} catch (SQLException e) {
-	    System.out.println("Error executing sql statement");
-	}
-
-	DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
-	Date Dateafgang = null, Dateankomst = null;
-	try {
-	    Dateafgang = df.parse(afgang);
-	    Dateankomst = df.parse(ankomst);
-	} catch (ParseException ex) {
-	}
-
-	if (Dateafgang.before(Dateankomst)) {
-	    dateChoose.add(afgang);
-
-	}
-    }
+ 
 
     public ArrayList getAllShip() {
 
