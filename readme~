@@ -20,20 +20,7 @@ Next steps:
 
 Existing Git Repo?
 
-        cd existing_git_repo
-        git remote add origin git@github.com:<brugernavn>/Projekt4sem.git
-        git push origin master
-  
-  
-  
-FIND og red slettet fil:
-
-liste over slettede filer:
-
-        git log --diff-filter=D --summary
-
-opret filen igen:
-
-        git checkout <deleting_commit>^ -- <file_path>
-
+  cd existing_git_repo
+  git remote add origin git@github.com:<brugernavn>/Projekt4sem.git
+  git push origin master
       

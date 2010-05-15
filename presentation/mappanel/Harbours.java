@@ -4,12 +4,9 @@
  */
 package presentation.mappanel;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -105,8 +102,8 @@ public class Harbours {
 	    } catch (IOException ex) {
 		System.out.println("Images/havn.png not found");
 	    }
-	    
-	    g.drawImage(img, px, py, 15, 15, null);
+
+	    g.drawImage(img, px, py, 20, 20, null);
 	    //g.fillRect(px, py, 5, 5);
 	    i++;
 	}
