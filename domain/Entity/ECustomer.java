@@ -5,7 +5,6 @@
 package domain.Entity;
 
 import Acquaintance.IACustomer;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,30 +16,36 @@ public class ECustomer implements IACustomer {
 
     private Map<String, EOrder> orders = new HashMap<String, EOrder>();
     private EOrder order;
+    private EOrder newOrder;
     int userID;
     String company;
     String adress;
-
-
+//-----------------------------------------------------------------------------
+    // Konstruktor.
     public ECustomer(int userID, String company, String adress) {
 	this.userID = userID;
 	this.company = company;
 	this.adress = adress;
-
     }
-
-    public void mapOrder(int OrderID, EShip Ship, EHarbour startHarbour, EHarbour endHarbour, String DepartureDate, String ArrivalDate) {
-	order = new EOrder(OrderID, getUserID(), Ship, startHarbour, endHarbour, DepartureDate, ArrivalDate);
+//-----------------------------------------------------------------------------
+    public void mapOrder(int OrderID, EShip Ship, EHarbour startHarbour, 
+	    EHarbour endHarbour, String DepartureDate, String ArrivalDate) {
+// Ordre oprettes.
+	order = new EOrder(OrderID, getUserID(), Ship, startHarbour, 
+		endHarbour, DepartureDate, ArrivalDate);
+// Ordre gemmes i hashmap med OrderID som key..
 	orders.put(Integer.toString(OrderID), order);
+// Her har man altid referencen til den nyeste ordre.
+	newOrder = order;
     }
-
-    public void mapContainerToOrder(int OrderID, int ContainerID, EContainer Container)	{
-
-	order = orders.get(Integer.toString(OrderID));
-	System.out.println(order.getOrderID());
+//-----------------------------------------------------------------------------
+    // Der kaldes til EOrder med referencen til EContainer.
+    public void mapContainerToOrder(EOrder Order, int ContainerID,
+	    EContainer Container)	{
+	this.order = Order;
 	order.mapContainerToOrder(ContainerID, Container);
     }
-
+//-----------------------------------------------------------------------------
     public EOrder getOrder(int OrderID) {
 	return orders.get(Integer.toString(OrderID));
     }
@@ -50,7 +55,7 @@ public class ECustomer implements IACustomer {
     }
 
     public String confirm() {
-	return  userID + " " + company + " " + adress +  " ";
+	return  userID + " " + company + " " + adress +  " " + newOrder.toString();
     }
 }
 

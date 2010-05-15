@@ -37,7 +37,7 @@ ArrayList<String> ShipDates = new ArrayList<String>();
 	 for (int i = 0 ; ShipDates.size() > i ; i++)	{
 	 System.out.println(ShipDates.get(i));
 	 }
-	 	 System.out.println("lige her");
+
 	 IACustomer iaCustomer;
 	 String departureDate = "2010-05-02";
 	 String arrivalDate = "2010-05-07";

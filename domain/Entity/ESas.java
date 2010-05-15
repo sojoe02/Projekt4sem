@@ -21,36 +21,46 @@ public class ESas {
     public int getUserID() {
 	return customer.getUserID();
     }
-
+//-----------------------------------------------------------------------------
+    // Skib mappes
     public void mapShip(int shipID, String shipName, String shipType,
 	    String Captain, int maxContainer) {
 	ship = new EShip(shipID, shipName, shipType,
 		Captain, maxContainer);
+	// skib gemmes i en hashmap, med shipID som key.
 	ships.put(Integer.toString(shipID), ship);
     }
+//-----------------------------------------------------------------------------
+    // Ordre mappes, hvor havnene oprettes og Ecustomer opretter ordre.
+    public void mapOrder(int OrderID, EShip Ship, String startCoordinate, 
+	    String startNationally, String endCoordinate, String endNationally,
+	    String startDest, String endDest,
+	    String DepartureDate, String ArrivalDate) {
 
-    public void mapOrder(int OrderID, EShip Ship, String startCoordinate, String startNationally,
-	    String endCoordinate, String endNationally, String startDest, String endDest, String DepartureDate, String ArrivalDate) {
 	harbour = new EHarbour(startDest, startCoordinate, startNationally);
 	harbours.put(startDest, harbour);
 	harbour = new EHarbour(endDest, endCoordinate, endNationally);
 	harbours.put(endDest, harbour);
-
-	customer.mapOrder(OrderID, Ship, harbours.get(startDest), harbours.get(endDest), DepartureDate, ArrivalDate);
+// Customer kaldes og order oprettes.
+	customer.mapOrder(OrderID, Ship, harbours.get(startDest),
+		harbours.get(endDest), DepartureDate, ArrivalDate);
     }
-
-
+//-----------------------------------------------------------------------------
+// Container bliver mappet.
     public void mapContainer (EShip Ship, int ContainerID, String Content,
 		    int OrderID, String Status)	{
 	this.ship = Ship;
+// Container mappes.
 	ship.mapContainer(ContainerID, Content, Status);
-	customer.mapContainerToOrder(OrderID, ContainerID, ship.getContainer(ContainerID));
+// EOrder skal have en reference til EContainer.
+	customer.mapContainerToOrder(customer.getOrder(OrderID), ContainerID,
+		ship.getContainer(ContainerID));
     }
-    
+//-----------------------------------------------------------------------------
     public EShip getShip(int ShipID)	{
 	return ships.get(Integer.toString(ShipID));
     }
-    public EOrder   getOrder (int OrderID)  {
+    public EOrder  getOrder (int OrderID)  {
 	return customer.getOrder(OrderID);
     }
     public ECustomer getCustomer() {
