@@ -1,6 +1,7 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *This class purpose is to handle routes which are defined in a txt document
+ * The class can draw a route taking accounting for zoomlevels via the
+ * pixelhandler class.
  */
 package presentation.mappanel;
 
@@ -32,12 +33,14 @@ public class RouteHandler {
 	distribute();
     }
 
+    /*
+     * This method distribute the long and lat values of the coordinates array
+     * into two double arrays one for longditudes and one for latitudes.
+     */
     private void distribute() {
 
 	int j = 0;
 	int k = 0;
-
-	System.out.println("coordinates" + coordinates.size());
 
 	longditude = new double[coordinates.size() / 2];
 	latitude = new double[coordinates.size() / 2];
@@ -62,7 +65,7 @@ public class RouteHandler {
 	    int width, int height) {
 	//----------------------------------------------------------------------
 	//Converting the latitude and longditude values to pixelvalues and
-	//integer
+	//integer, taking in acount the zoomlevel.
 	//----------------------------------------------------------------------
 	double sx = pxhandler.scalingX(longmin, longmax, width);
 	double sy = pxhandler.scalingY(latmin, latmax, height);
@@ -88,8 +91,10 @@ public class RouteHandler {
 	//----------------------------------------------------------------------
 
 	int a = 1;
-	g.fillOval(10, 10, 10, 10);
 
+	/*
+	 * Draw a line between gps coordinates.
+	 */
 	while (latitude.length > a) {
 	    g.setColor(Color.black);
 	    g.drawLine(intLong[a - 1], intLat[a - 1],
