@@ -268,7 +268,7 @@ public class placeOrderPanel extends JPanel {
             //skriver alle de søgte datoer og skibs id ud
             while(c<shipDates.size()){
                 shipsText.append("Start datoer: " + shipDates.get(a));
-                a=a+3;
+//                a=a+3;
                 shipsText.append("\nSlut datoer: " + shipDates.get(b));
                 b=b+3;
                 shipsText.append("\nSkibs ID: " + shipDates.get(c)+ "\n\n");
