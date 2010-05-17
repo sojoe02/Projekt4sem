@@ -1,16 +1,15 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Class made to launch the SAS client, holds the main method and SAS frame
+ * 
  */
 package presentation;
 
 /**
  *
- * @author Soren V Jorgensen.
+ * @author Dan Vi, Stefan Skytthe, Soren V Jorgensen og Mats Larsen.
  */
 import presentation.mappanel.ShowMap;
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import java.io.File;

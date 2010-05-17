@@ -39,12 +39,14 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
     private double latmax;
     private ZoomHandler zoom = new ZoomHandler();
     Timer timer;
+    private RouteHandler route = new RouteHandler("Odense", "NewOrleans");
 
     public ShowMap() {
 	//Setting up the mapwindow
 	timer = new Timer(100, this);
 	//initial delay while window gets set up
 	timer.setInitialDelay(100);
+
 	timer.start();
 
 	addMouseListener(this);
@@ -88,6 +90,8 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 	shipRender(g2);
 	harbour.drawHarbours(g2, longmin, longmax, latmin, latmax,
 		getWidth(), getHeight());
+	route.drawRoute(g, longmin, longmax, latmin,
+		latmax, getWidth(), getHeight());
     }
 
     private void shipRender(Graphics g) {
@@ -95,12 +99,6 @@ public class ShowMap extends JComponent implements ActionListener, MouseListener
 	double sx = pxhandler.scalingX(longmin, longmax, getWidth());
 	double sy = pxhandler.scalingY(latmin, latmax, getHeight());
 
-/*
-	int pxx = pxhandler.zoomLongToPixels(10.3930664, sx, longmin, longmax);
-	int pyy = pxhandler.zoomLatToPixels(55.39159210, sy, latmin, latmax);
-
-	harbour.drawHarbour(g, pxx, pyy, Zoomflag, "Odense");
-*/
 	for (Ship ship : ships) {
 
 	    int px = pxhandler.zoomLongToPixels(MAPCONTROL.getLongditude(f),

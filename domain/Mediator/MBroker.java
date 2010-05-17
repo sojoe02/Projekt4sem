@@ -221,7 +221,7 @@ public class MBroker implements IAContants {
 	int orderID = saveNewOrder(userID, ShipID, DepartureDate, ArrivalDate);
 	// Ordres Container skal gemmes i Containertabellen.
 	saveNewContainer(orderID, ShipID, containers, content);
-	// Tidsplanen opdateres.
+	// Tidsplanen opdateres i databasen.
 	updateSchedulling(ShipID, DepartureDate, ArrivalDate, containers);
 	// Kundes order mappes.
 	mapOrder(userID, startDest, endDest);
@@ -246,6 +246,7 @@ public class MBroker implements IAContants {
     }
 //----------------------------------------------------------------------------
     // Henter OrderID, da den selv genereres i databasen.
+
     private int getOrderID(int ShipID, String DepartureDate) throws SQLException {
 
 	sqlStmt = "SELECT * FROM  Ordre "
@@ -279,6 +280,7 @@ public class MBroker implements IAContants {
     }
 //------------------------------------------------------------------------------
 // Schedulling opdateres med currentContainer.
+
     private void updateSchedulling(int ShipID, String DepartureDate,
 	    String ArrivalDate, int containers) throws SQLException {
 
@@ -286,10 +288,10 @@ public class MBroker implements IAContants {
 	int sIDDeparture = getSIDDeparture(ShipID, DepartureDate);
 	int sIDArrival = getSIDArrival(ShipID, ArrivalDate);
 
-/*
- * Opdaterer Schedullingtabellen med det nye antal af currentContainer,
- * hvor der opdateres fra afgangsdato til ankomstdato.
- */
+	/*
+	 * Opdaterer Schedullingtabellen med det nye antal af currentContainer,
+	 * hvor der opdateres fra afgangsdato til ankomstdato.
+	 */
 	for (int i = sIDDeparture; i < sIDArrival + 1; i++) {
 
 	    sqlStmt = "SELECT * FROM Schedulling "
@@ -306,7 +308,8 @@ public class MBroker implements IAContants {
 	}
     }
 //----------------------------------------------------------------------------
-    private int getSIDDeparture(int ShipID, String DepartureDate) throws SQLException    {
+
+    private int getSIDDeparture(int ShipID, String DepartureDate) throws SQLException {
 
 	sqlStmt = "SELECT * FROM Schedulling "
 		+ "WHERE ShipID = " + ShipID
@@ -318,8 +321,9 @@ public class MBroker implements IAContants {
 	return sIDDeparture;
     }
     //----------------------------------------------------------------------------
-    private int getSIDArrival(int ShipID, String ArrivalDate) throws SQLException	{
-    	sqlStmt = "SELECT * FROM Schedulling "
+
+    private int getSIDArrival(int ShipID, String ArrivalDate) throws SQLException {
+	sqlStmt = "SELECT * FROM Schedulling "
 		+ "WHERE ShipID = " + ShipID
 		+ " AND Date = '" + ArrivalDate + "';";
 	rs = connection.getReader().query(sqlStmt);
@@ -333,84 +337,78 @@ public class MBroker implements IAContants {
      * Stmt sendes til Reader, som henter de order, som er oprettet med det 
     bestemte userID. Dermed oprettes orderne en af gangen.
      */
+
     private void mapOrder(int UserID, String startDest, String endDest) throws SQLException {
 
+	// Stmt henter de ordre, som tilholder til den bestemte userID.
 	sqlStmt = "SELECT * FROM Ordre "
 		+ "WHERE UserID = " + UserID + ";";
-	rs = connection.getReader().query(sqlStmt);
+	ResultSet rsOrder = connection.getReader().query(sqlStmt);
 
-	while (rs.next()) {
-	    int orderID = rs.getInt("OrderID");
-	    int shipID = rs.getInt("ShipID");
-	    String departureDate = rs.getString("DepartureDate");
-	    String arrivalDate = rs.getString("ArrivalDate");
-
+	while (rsOrder.next()) {
+	    int orderID = rsOrder.getInt("OrderID");
+	    int shipID = rsOrder.getInt("ShipID");
+	    String departureDate = rsOrder.getString("DepartureDate");
+	    String arrivalDate = rsOrder.getString("ArrivalDate");
+// skib mappes i entity pakken.
 	    mapShip(shipID);
+// henter start og slut havns informationer.
+	    ResultSet rsStartDest = getHarbourInfo(startDest);
+	    ResultSet rsEndDest = getHarbourInfo(endDest);
 
-
-	    sqlStmt = "SELECT * FROM Harbour "
-		    + "WHERE Harbour = '" + startDest + "';";
-	    ResultSet rsstartDest = connection.getReader().query(sqlStmt);
-
-	    sqlStmt = "SELECT * FROM Harbour "
-		    + "WHERE Harbour = '" + endDest + "';";
-	    ResultSet rsendDest = connection.getReader().query(sqlStmt);
-
-	    rsstartDest.next();
-	    rsendDest.next();
-
+	    rsStartDest.next();
+	    rsEndDest.next();
+// Ordre mappes i Entity.
 	    sas.mapOrder(orderID, sas.getShip(shipID), startDest, endDest,
-		    rsstartDest.getString("Coordinate"), rsstartDest.getString("Nationally"),
-		    rsendDest.getString("Coordinate"), rsendDest.getString("Nationally"),
+		    rsStartDest.getString("Coordinate"), rsStartDest.getString("Nationally"),
+		    rsEndDest.getString("Coordinate"), rsEndDest.getString("Nationally"),
 		    departureDate, arrivalDate);
-
-
+// Container mappes i entity.
 	    mapContainer(shipID, orderID);
-
-
-
-
+	    //ResultSet sluttes.
+	    connection.getReader().closeResult(rsStartDest);
+	    connection.getReader().closeResult(rsEndDest);
 	}
 	connection.getReader().closeResult(rs);
+	connection.getReader().closeResult(rsOrder);
+
     }
+//-----------------------------------------------------------------------------
+
+    private ResultSet getHarbourInfo(String Dest) throws SQLException {
+	sqlStmt = "SELECT * FROM Harbour "
+		+ "WHERE Harbour = '" + Dest + "';";
+	rs = connection.getReader().query(sqlStmt);
+	return rs;
+    }
+//-----------------------------------------------------------------------------
+    // Skib mappes i Entity pakken.
 
     private void mapShip(int shipID) throws SQLException {
-
+// Stmt henter det specifikke skib via shipID.
 	sqlStmt = "SELECT * FROM ship "
 		+ "WHERE ShipID = " + shipID + ";";
 	rs = connection.getReader().query(sqlStmt);
 	rs.next();
-
+// ESas kaldes med skibets parameter.
 	sas.mapShip(shipID, rs.getString("ShipName"), rs.getString("ShipType"),
 		rs.getString("Captain"), rs.getInt("MaxContainer"));
-
     }
-    /*
-
-    private void mapCargo(int ShipID) throws SQLException {
-
-    sqlStmt = "SELECT * FROM ship "
-    + "WHERE ShipID = " + ShipID + ";";
-    rs = connection.getReader().query(sqlStmt);
-    rs.next();
-    int maxContainer = rs.getInt("MaxContainer");
-    sas.mapCargo(sas.getShip(ShipID), maxContainer);
-    }
-
-     *
-     */
+//-----------------------------------------------------------------------------
+    // Mapper Container via EShip og ECargo.
 
     private void mapContainer(int ShipID, int OrderID) throws SQLException {
 
+// Henter Container med det specifikke orderID.
 	sqlStmt = "SELECT * FROM Container "
-		+ "WHERE ShipID = " + ShipID + ";";
+		+ "WHERE OrderID = " + OrderID + ";";
 	rs = connection.getReader().query(sqlStmt);
+// Opretter det antal containerobjekter, som orderen var på.
 	while (rs.next()) {
 	    sas.mapContainer(sas.getShip(ShipID), rs.getInt("ContainerID"), rs.getString("Content"),
 		    OrderID, rs.getString("Status"));
-
 	}
-
     }
 }
+
 

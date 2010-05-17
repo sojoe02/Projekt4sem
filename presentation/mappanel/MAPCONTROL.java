@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * This Static class will recieve coordinates from ship threads
+ * and let the mappanel class read from it. It is sort of an entity class!
+ * however the nature make it more prudent to choose this form instead of a
+ * regular class.
  */
 package presentation.mappanel;
 
@@ -16,6 +18,9 @@ public class MAPCONTROL {
 
     private static int gpsNr = 1;
 
+    /*Hashtables for londitude and latidute, Hashtable is syncronized so reading
+     * and writing is done by semaphore, which allow for multiple thread access.
+     */
     public static Map<Integer, Double> longditude =
 	    new Hashtable<Integer, Double>(50);
     public static Map<Integer, Double> latitude =
